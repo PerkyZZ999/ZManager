@@ -241,20 +241,24 @@ export function Sidebar() {
   // Use ref to prevent double execution in React Strict Mode
   const defaultsAddedRef = useRef(false);
   useEffect(() => {
-    if (!favoritesLoading && favorites.length === 0 && !defaultsAddedRef.current) {
-      defaultsAddedRef.current = true;
-      const userProfile = import.meta.env.VITE_USERNAME || "Public";
-      const basePath = `C:\\Users\\${userProfile}`;
-
-      // Add defaults sequentially
-      const addDefaults = async () => {
-        for (const def of DEFAULT_FAVORITES) {
-          const path = def.pathSuffix ? `${basePath}${def.pathSuffix}` : "C:\\Users";
-          await addFavorite(def.name, path, def.icon);
-        }
-      };
-      addDefaults();
+    // Only add defaults when not loading and no favorites exist yet
+    if (favoritesLoading || favorites.length > 0 || defaultsAddedRef.current) {
+      return;
     }
+    defaultsAddedRef.current = true;
+
+    // Get user profile path from environment
+    const userProfile =
+      import.meta.env.VITE_USERPROFILE || `C:\\Users\\${import.meta.env.VITE_USERNAME || "Public"}`;
+
+    // Add defaults sequentially
+    const addDefaults = async () => {
+      for (const def of DEFAULT_FAVORITES) {
+        const path = def.pathSuffix ? `${userProfile}${def.pathSuffix}` : userProfile;
+        await addFavorite(def.name, path, def.icon);
+      }
+    };
+    addDefaults();
   }, [favoritesLoading, favorites.length, addFavorite]);
 
   const handleNavigate = useCallback(

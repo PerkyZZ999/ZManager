@@ -41,14 +41,19 @@ export const SvgIcon = memo(function SvgIcon({
   size = 16,
   className = "",
   color,
-  currentColor = false,
+  currentColor,
   style,
   alt,
 }: SvgIconProps) {
   const symbolId = `#icon-${name}`;
 
+  // Auto-detect UI icons (they start with "ic_") and use currentColor for them
+  // UI icons are monochrome and should inherit text color for dark theme compatibility
+  const isUiIcon = name.startsWith("ic_");
+  const shouldUseCurrentColor = currentColor ?? isUiIcon;
+
   // Determine fill color
-  const fill = currentColor ? "currentColor" : color;
+  const fill = shouldUseCurrentColor ? "currentColor" : color;
 
   return (
     <svg

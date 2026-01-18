@@ -52,6 +52,10 @@ body,
   overflow: hidden;
 }
 
+html {
+  font-size: 14px; /* Base font size (reduced from 16px for compact UI) */
+}
+
 body {
   font-family: var(--font-family-sans);
   background-color: var(--color-bg-primary);

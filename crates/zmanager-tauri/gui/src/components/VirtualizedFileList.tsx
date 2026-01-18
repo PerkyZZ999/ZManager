@@ -72,9 +72,8 @@ function ColumnHeader({ sort, onSortChange }: ColumnHeaderProps) {
     if (sort.field !== field) return null;
     return (
       <SvgIcon
-        src={`/icons/ui/ic_arrow_sort_${sort.order === "ascending" ? "up" : "down"}.svg`}
+        name={sort.order === "ascending" ? "ic_arrow_sort_up" : "ic_arrow_sort_down"}
         size={12}
-        alt={sort.order}
         className="ml-1"
       />
     );
@@ -152,7 +151,6 @@ function FileRow({
     <li
       ref={setNodeRef}
       style={style}
-      tabIndex={0}
       onClick={(e) => onSelect(index, entry, e)}
       onDoubleClick={() => onDoubleClick(entry)}
       onContextMenu={(e) => onContextMenu?.(e, entry)}
@@ -173,9 +171,10 @@ function FileRow({
       data-index={index}
       {...attributes}
       {...listeners}
+      tabIndex={0}
     >
       <span className="flex w-5 shrink-0 items-center justify-center">
-        <SvgIcon src={iconInfo.path} size={16} alt={entry.kind} />
+        <SvgIcon name={iconInfo.symbolName} size={16} />
       </span>
       <span className="min-w-0 flex-1 truncate">{entry.name}</span>
       <span className="w-20 shrink-0 text-right text-zinc-400">
@@ -193,13 +192,7 @@ function FileRow({
 function EmptyState() {
   return (
     <div className="flex h-full flex-col items-center justify-center py-16 text-zinc-500">
-      <SvgIcon
-        src="/icons/filetypes/folder_type_folder_opened.svg"
-        size={64}
-        alt="Empty folder"
-        className="mb-4 opacity-30"
-        invert={false}
-      />
+      <SvgIcon name="folder-base-open" size={64} className="mb-4 opacity-30" />
       <p className="font-medium text-lg">This folder is empty</p>
       <p className="mt-1 text-sm">Drop files here or create new ones</p>
     </div>
@@ -234,7 +227,7 @@ function ErrorState({ error, onRetry }: ErrorStateProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-16">
       <div className="flex items-center gap-2 text-red-400">
-        <SvgIcon src="/icons/ui/ic_warning.svg" size={24} alt="Error" />
+        <SvgIcon name="ic_warning" size={24} />
         <span>{error}</span>
       </div>
       <button

@@ -91,7 +91,7 @@ function MenuItem({ item, onClose }: { item: MenuItemDef; onClose: () => void })
     >
       {/* Icon */}
       <span className="flex w-4 items-center justify-center">
-        {item.icon && <SvgIcon src={item.icon} size={16} alt="" />}
+        {item.icon && <SvgIcon name={item.icon} size={16} />}
       </span>
 
       {/* Label */}

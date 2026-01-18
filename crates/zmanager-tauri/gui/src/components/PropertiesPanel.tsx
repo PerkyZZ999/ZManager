@@ -114,7 +114,7 @@ function SingleEntryProperties({ entry }: { entry: EntryMeta }) {
     <div>
       {/* Header with icon and name */}
       <div className="mb-4 flex items-center gap-3">
-        <SvgIcon src={iconInfo.path} size={48} alt={entry.kind} invert={false} />
+        <SvgIcon name={iconInfo.symbolName} size={48} />
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-semibold text-lg">{entry.name}</h3>
           <p className="text-sm text-zinc-400">{getFileType(entry)}</p>
@@ -197,12 +197,7 @@ function MultipleEntryProperties({ entries }: { entries: EntryMeta[] }) {
     <div>
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
-        <SvgIcon
-          src="/icons/filetypes/folder_type_folder.svg"
-          size={48}
-          alt="Multiple items"
-          invert={false}
-        />
+        <SvgIcon name="folder_type_folder" size={48} alt="Multiple items" />
         <div>
           <h3 className="font-semibold text-lg">{entries.length} items selected</h3>
           <p className="text-sm text-zinc-400">
@@ -232,7 +227,7 @@ function MultipleEntryProperties({ entries }: { entries: EntryMeta[] }) {
             const iconInfo = getIconForEntry(entry);
             return (
               <div key={entry.path} className="flex items-center gap-2 px-2 py-1 text-sm">
-                <SvgIcon src={iconInfo.path} size={16} alt={entry.kind} invert={false} />
+                <SvgIcon name={iconInfo.symbolName} size={16} />
                 <span className="truncate">{entry.name}</span>
               </div>
             );
@@ -272,7 +267,7 @@ export function PropertiesPanel({ entries, onClose, asModal = true }: Properties
               className="rounded p-1 transition-colors hover:bg-white/10"
               aria-label="Close"
             >
-              <SvgIcon src="/icons/ui/ic_dismiss.svg" size={16} alt="Close" />
+              <SvgIcon name="ic_dismiss" size={16} />
             </button>
           </div>
 
@@ -306,7 +301,7 @@ export function PropertiesPanel({ entries, onClose, asModal = true }: Properties
           className="rounded p-1 transition-colors hover:bg-white/10"
           aria-label="Close"
         >
-          <SvgIcon src="/icons/ui/ic_dismiss.svg" size={14} alt="Close" />
+          <SvgIcon name="ic_dismiss" size={14} />
         </button>
       </div>
 

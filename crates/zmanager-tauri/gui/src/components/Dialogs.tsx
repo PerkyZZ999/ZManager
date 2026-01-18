@@ -104,7 +104,7 @@ function DialogWrapper({ title, children, onClose, footer, width = "w-96" }: Dia
             className="rounded p-1 transition-colors hover:bg-white/10"
             aria-label="Close dialog"
           >
-            <SvgIcon src="/icons/ui/ic_dismiss.svg" size={16} alt="Close" />
+            <SvgIcon name="ic_dismiss" size={16} />
           </button>
         </div>
 

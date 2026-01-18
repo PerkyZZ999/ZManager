@@ -61,28 +61,28 @@ function getVariantStyles(variant: ToastVariant) {
       return {
         bg: "bg-green-900/90",
         border: "border-green-500/30",
-        icon: "/icons/ui/ic_check_circle.svg",
+        icon: "ic_check_circle",
         iconClass: "text-green-400",
       };
     case "error":
       return {
         bg: "bg-red-900/90",
         border: "border-red-500/30",
-        icon: "/icons/ui/ic_error.svg",
+        icon: "ic_error",
         iconClass: "text-red-400",
       };
     case "warning":
       return {
         bg: "bg-yellow-900/90",
         border: "border-yellow-500/30",
-        icon: "/icons/ui/ic_warning.svg",
+        icon: "ic_warning",
         iconClass: "text-yellow-400",
       };
     case "info":
       return {
         bg: "bg-blue-900/90",
         border: "border-blue-500/30",
-        icon: "/icons/ui/ic_info.svg",
+        icon: "ic_info",
         iconClass: "text-blue-400",
       };
   }
@@ -110,7 +110,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
       )}
       role="alert"
     >
-      <SvgIcon src={styles.icon} size={20} alt={toast.variant} className={styles.iconClass} />
+      <SvgIcon name={styles.icon} size={20} className={styles.iconClass} />
       <div className="min-w-0 flex-1">
         <p className="font-medium text-sm">{toast.title}</p>
         {toast.message && <p className="mt-1 text-sm text-white/70">{toast.message}</p>}
@@ -133,7 +133,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
         className="rounded p-1 transition-colors hover:bg-white/10"
         aria-label="Dismiss"
       >
-        <SvgIcon src="/icons/ui/ic_close.svg" size={16} alt="Close" />
+        <SvgIcon name="ic_close" size={16} />
       </button>
     </div>
   );

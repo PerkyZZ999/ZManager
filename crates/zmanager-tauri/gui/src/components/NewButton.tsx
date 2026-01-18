@@ -34,24 +34,24 @@ const NEW_ITEM_TYPES: NewItemType[] = [
   {
     id: "folder",
     label: "Folder",
-    icon: "/icons/ui/ic_folder_add.svg",
+    icon: "ic_folder_add",
   },
   {
     id: "text",
     label: "Text Document",
-    icon: "/icons/ui/ic_document_add.svg",
+    icon: "ic_document_add",
     extension: ".txt",
   },
   {
     id: "markdown",
     label: "Markdown File",
-    icon: "/icons/ui/ic_document.svg",
+    icon: "ic_document",
     extension: ".md",
   },
   {
     id: "json",
     label: "JSON File",
-    icon: "/icons/ui/ic_braces.svg",
+    icon: "ic_braces",
     extension: ".json",
   },
 ];
@@ -125,12 +125,11 @@ export function NewButton({ onNewFolder, onNewFile, className }: NewButtonProps)
         aria-haspopup="menu"
         title="Create new file or folder"
       >
-        <SvgIcon src="/icons/ui/ic_add.svg" size={14} alt="" />
+        <SvgIcon name="ic_add" size={14} />
         <span>New</span>
         <SvgIcon
-          src="/icons/ui/ic_chevron_down.svg"
+          name="ic_chevron_down"
           size={12}
-          alt=""
           className={clsx("transition-transform", isOpen && "rotate-180")}
         />
       </button>
@@ -159,7 +158,7 @@ export function NewButton({ onNewFolder, onNewFile, className }: NewButtonProps)
                   "text-zinc-200 transition-colors hover:bg-white/10"
                 )}
               >
-                <SvgIcon src={item.icon} size={16} alt="" />
+                <SvgIcon name={item.icon} size={16} />
                 <span>{item.label}</span>
               </button>
             </div>

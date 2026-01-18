@@ -42,7 +42,7 @@ function SearchInput({ value, onChange, placeholder = "Search..." }: SearchInput
   return (
     <div className="relative">
       <SvgIcon
-        src="/icons/ui/ic_search.svg"
+        name="ic_search"
         size={14}
         alt="Search"
         className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 opacity-50"
@@ -105,7 +105,7 @@ function PaneHeader({
         aria-label="Go back"
         title="Go back (Alt+Left)"
       >
-        <SvgIcon src="/icons/ui/ic_chevron_left.svg" size={14} alt="Back" />
+        <SvgIcon name="ic_chevron_left" size={14} />
       </button>
       <button
         type="button"
@@ -115,7 +115,7 @@ function PaneHeader({
         aria-label="Go forward"
         title="Go forward (Alt+Right)"
       >
-        <SvgIcon src="/icons/ui/ic_chevron_right.svg" size={14} alt="Forward" />
+        <SvgIcon name="ic_chevron_right" size={14} />
       </button>
       <button
         type="button"
@@ -124,7 +124,7 @@ function PaneHeader({
         aria-label="Go up"
         title="Go to parent folder (Backspace)"
       >
-        <SvgIcon src="/icons/ui/ic_chevron_up.svg" size={14} alt="Up" />
+        <SvgIcon name="ic_chevron_up" size={14} />
       </button>
       <button
         type="button"
@@ -133,7 +133,7 @@ function PaneHeader({
         aria-label="Refresh"
         title="Refresh (F5)"
       >
-        <SvgIcon src="/icons/ui/ic_arrow_clockwise.svg" size={14} alt="Refresh" />
+        <SvgIcon name="ic_arrow_clockwise" size={14} />
       </button>
 
       {/* New button dropdown */}
@@ -470,7 +470,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "open",
           label: isDirectory ? "Open" : "Open",
-          icon: "/icons/ui/ic_open.svg",
+          icon: "ic_open",
           shortcut: "Enter",
           onClick: () => {
             if (singleSelection) {
@@ -485,7 +485,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "cut",
           label: "Cut",
-          icon: "/icons/ui/ic_cut.svg",
+          icon: "ic_cut",
           shortcut: "Ctrl+X",
           onClick: handleCut,
         });
@@ -493,7 +493,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "copy",
           label: "Copy",
-          icon: "/icons/ui/ic_copy.svg",
+          icon: "ic_copy",
           shortcut: "Ctrl+C",
           onClick: handleCopy,
         });
@@ -503,7 +503,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "rename",
           label: "Rename",
-          icon: "/icons/ui/ic_rename.svg",
+          icon: "ic_rename",
           shortcut: "F2",
           disabled: !singleSelection,
           onClick: handleRename,
@@ -512,7 +512,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "delete",
           label: "Delete",
-          icon: "/icons/ui/ic_delete.svg",
+          icon: "ic_delete",
           shortcut: "Del",
           danger: true,
           onClick: handleDelete,
@@ -523,7 +523,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "properties",
           label: "Properties",
-          icon: "/icons/ui/ic_info.svg",
+          icon: "ic_info",
           shortcut: "Alt+Enter",
           onClick: handleShowProperties,
         });
@@ -533,7 +533,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "new-folder",
           label: "New Folder",
-          icon: "/icons/ui/ic_folder_add.svg",
+          icon: "ic_folder_add",
           shortcut: "Ctrl+Shift+N",
           onClick: handleNewFolder,
         });
@@ -541,7 +541,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "new-file",
           label: "New Text Document",
-          icon: "/icons/ui/ic_document_add.svg",
+          icon: "ic_document_add",
           onClick: handleNewFile,
         });
 
@@ -551,7 +551,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "paste",
           label: "Paste",
-          icon: "/icons/ui/ic_clipboard_paste.svg",
+          icon: "ic_clipboard_paste",
           shortcut: "Ctrl+V",
           disabled: !canPaste,
           onClick: handlePaste,
@@ -562,7 +562,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
         menuItems.push({
           id: "refresh",
           label: "Refresh",
-          icon: "/icons/ui/ic_arrow_clockwise.svg",
+          icon: "ic_arrow_clockwise",
           shortcut: "F5",
           onClick: () => refresh(paneId),
         });

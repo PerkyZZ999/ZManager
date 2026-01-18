@@ -74,7 +74,7 @@ function DragPreview({ entries }: { entries: EntryMeta[] }) {
 
   return (
     <div className="flex items-center gap-2 rounded bg-zinc-800/95 px-3 py-2 shadow-lg ring-1 ring-white/10">
-      <SvgIcon src={iconInfo.path} size={20} alt={firstEntry.kind} />
+      <SvgIcon name={iconInfo.symbolName} size={20} />
       <span className="max-w-48 truncate font-medium text-sm">
         {entries.length === 1 ? firstEntry.name : `${entries.length} items`}
       </span>

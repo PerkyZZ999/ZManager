@@ -94,7 +94,7 @@ function Breadcrumbs({ segments, onNavigate }: BreadcrumbProps) {
         <span key={segment.path} className="flex flex-shrink-0 items-center">
           {index > 0 && (
             <SvgIcon
-              src="/icons/ui/ic_chevron_right_small.svg"
+              name="ic_chevron_right_small"
               size={12}
               alt="separator"
               className="mx-0.5 opacity-50"
@@ -148,14 +148,9 @@ function AutocompleteDropdown({
           )}
         >
           <SvgIcon
-            src={
-              suggestion.isDirectory
-                ? "/icons/filetypes/folder_type_folder.svg"
-                : "/icons/filetypes/file_type_default.svg"
-            }
+            name={suggestion.isDirectory ? "folder_type_folder" : "file_type_default"}
             size={16}
             alt={suggestion.isDirectory ? "folder" : "file"}
-            invert={false}
           />
           <span className="truncate">{suggestion.name}</span>
         </button>

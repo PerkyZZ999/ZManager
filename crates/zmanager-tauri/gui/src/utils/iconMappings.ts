@@ -1,172 +1,172 @@
 /**
  * Icon mapping utilities for ZManager
  *
- * Maps file extensions and types to their corresponding icon paths.
+ * Maps file extensions and types to their corresponding sprite symbol names.
+ * Uses vite-plugin-svg-icons for sprite generation.
  * Priority: dev_icons > filetypes > ui (fallback)
+ *
+ * Symbol ID format: icon-{dir}-{name} (without .svg extension)
+ * - dev_icons: icon-{folder}-{filename} e.g., "icon-typescript-typescript-original"
+ * - filetypes: icon-{filename} e.g., "icon-document"
+ * - ui: icon-{filename} e.g., "icon-ic_copy"
  */
 
 import type { EntryMeta } from "../types";
 
-// Base paths for icon categories
-const ICONS_BASE = "/icons";
-const DEV_ICONS = `${ICONS_BASE}/dev_icons`;
-const FILETYPES = `${ICONS_BASE}/filetypes`;
-const UI = `${ICONS_BASE}/ui`;
-
 /**
- * Dev icons mapping: extension/name → dev_icon folder/file
- * These are high-quality branded icons for developer tools and languages
+ * Dev icons mapping: extension/name → symbol name
+ * Format: extension -> "folder-filename" (will become "icon-folder-filename")
  */
 const DEV_ICON_MAP: Record<string, string> = {
   // TypeScript
-  ts: "typescript/typescript-original.svg",
-  tsx: "typescript/typescript-original.svg",
+  ts: "typescript-typescript-original",
+  tsx: "typescript-typescript-original",
   // JavaScript
-  js: "javascript/javascript-original.svg",
-  mjs: "javascript/javascript-original.svg",
-  cjs: "javascript/javascript-original.svg",
-  jsx: "react/react-original.svg",
+  js: "javascript-javascript-original",
+  mjs: "javascript-javascript-original",
+  cjs: "javascript-javascript-original",
+  jsx: "react-react-original",
   // React
   // Rust
-  rs: "rust/rust-original.svg",
+  rs: "rust-rust-original",
   // Python
-  py: "python/python-original.svg",
-  pyw: "python/python-original.svg",
-  pyi: "python/python-original.svg",
+  py: "python-python-original",
+  pyw: "python-python-original",
+  pyi: "python-python-original",
   // Java
-  java: "java/java-original.svg",
-  jar: "java/java-original.svg",
+  java: "java-java-original",
+  jar: "java-java-original",
   // C/C++
-  c: "c/c-original.svg",
-  h: "c/c-original.svg",
-  cpp: "cplusplus/cplusplus-original.svg",
-  cxx: "cplusplus/cplusplus-original.svg",
-  cc: "cplusplus/cplusplus-original.svg",
-  hpp: "cplusplus/cplusplus-original.svg",
-  hxx: "cplusplus/cplusplus-original.svg",
+  c: "c-c-original",
+  h: "c-c-original",
+  cpp: "cplusplus-cplusplus-original",
+  cxx: "cplusplus-cplusplus-original",
+  cc: "cplusplus-cplusplus-original",
+  hpp: "cplusplus-cplusplus-original",
+  hxx: "cplusplus-cplusplus-original",
   // C#
-  cs: "csharp/csharp-original.svg",
-  csx: "csharp/csharp-original.svg",
+  cs: "csharp-csharp-original",
+  csx: "csharp-csharp-original",
   // Go
-  go: "go/go-original.svg",
-  mod: "go/go-original.svg",
+  go: "go-go-original",
+  mod: "go-go-original",
   // Ruby
-  rb: "ruby/ruby-original.svg",
-  erb: "ruby/ruby-original.svg",
-  gemspec: "ruby/ruby-original.svg",
+  rb: "ruby-ruby-original",
+  erb: "ruby-ruby-original",
+  gemspec: "ruby-ruby-original",
   // PHP
-  php: "php/php-original.svg",
-  phtml: "php/php-original.svg",
+  php: "php-php-original",
+  phtml: "php-php-original",
   // Swift
-  swift: "swift/swift-original.svg",
+  swift: "swift-swift-original",
   // Kotlin
-  kt: "kotlin/kotlin-original.svg",
-  kts: "kotlin/kotlin-original.svg",
+  kt: "kotlin-kotlin-original",
+  kts: "kotlin-kotlin-original",
   // Scala
-  scala: "scala/scala-original.svg",
-  sc: "scala/scala-original.svg",
+  scala: "scala-scala-original",
+  sc: "scala-scala-original",
   // Dart
-  dart: "dart/dart-original.svg",
+  dart: "dart-dart-original",
   // Lua
-  lua: "lua/lua-original.svg",
+  lua: "lua-lua-original",
   // Perl
-  pl: "perl/perl-original.svg",
-  pm: "perl/perl-original.svg",
+  pl: "perl-perl-original",
+  pm: "perl-perl-original",
   // Haskell
-  hs: "haskell/haskell-original.svg",
-  lhs: "haskell/haskell-original.svg",
+  hs: "haskell-haskell-original",
+  lhs: "haskell-haskell-original",
   // Elixir
-  ex: "elixir/elixir-original.svg",
-  exs: "elixir/elixir-original.svg",
+  ex: "elixir-elixir-original",
+  exs: "elixir-elixir-original",
   // Erlang
-  erl: "erlang/erlang-original.svg",
-  hrl: "erlang/erlang-original.svg",
+  erl: "erlang-erlang-original",
+  hrl: "erlang-erlang-original",
   // Clojure
-  clj: "clojure/clojure-original.svg",
-  cljs: "clojure/clojure-original.svg",
-  cljc: "clojure/clojure-original.svg",
+  clj: "clojure-clojure-original",
+  cljs: "clojure-clojure-original",
+  cljc: "clojure-clojure-original",
   // F#
-  fs: "fsharp/fsharp-original.svg",
-  fsx: "fsharp/fsharp-original.svg",
-  fsi: "fsharp/fsharp-original.svg",
+  fs: "fsharp-fsharp-original",
+  fsx: "fsharp-fsharp-original",
+  fsi: "fsharp-fsharp-original",
   // R
-  r: "r/r-original.svg",
-  rmd: "r/r-original.svg",
+  r: "r-r-original",
+  rmd: "r-r-original",
   // Julia
-  jl: "julia/julia-original.svg",
+  jl: "julia-julia-original",
   // Nim
-  nim: "nim/nim-original.svg",
+  nim: "nim-nim-original",
   // Zig
-  zig: "zig/zig-original.svg",
+  zig: "zig-zig-original",
   // OCaml
-  ml: "ocaml/ocaml-original.svg",
-  mli: "ocaml/ocaml-original.svg",
+  ml: "ocaml-ocaml-original",
+  mli: "ocaml-ocaml-original",
   // HTML
-  html: "html5/html5-original.svg",
-  htm: "html5/html5-original.svg",
-  xhtml: "html5/html5-original.svg",
+  html: "html5-html5-original",
+  htm: "html5-html5-original",
+  xhtml: "html5-html5-original",
   // CSS
-  css: "css3/css3-original.svg",
+  css: "css3-css3-original",
   // Sass/SCSS
-  scss: "sass/sass-original.svg",
-  sass: "sass/sass-original.svg",
+  scss: "sass-sass-original",
+  sass: "sass-sass-original",
   // Less
-  less: "less/less-plain-wordmark.svg",
+  less: "less-less-plain-wordmark",
   // JSON
-  json: "json/json-original.svg",
-  jsonc: "json/json-original.svg",
-  json5: "json/json-original.svg",
+  json: "json-json-original",
+  jsonc: "json-json-original",
+  json5: "json-json-original",
   // YAML
-  yaml: "yaml/yaml-original.svg",
-  yml: "yaml/yaml-original.svg",
+  yaml: "yaml-yaml-original",
+  yml: "yaml-yaml-original",
   // XML
-  xml: "xml/xml-original.svg",
-  xsl: "xml/xml-original.svg",
-  xslt: "xml/xml-original.svg",
+  xml: "xml-xml-original",
+  xsl: "xml-xml-original",
+  xslt: "xml-xml-original",
   // Markdown
-  md: "markdown/markdown-original.svg",
-  mdx: "markdown/markdown-original.svg",
-  markdown: "markdown/markdown-original.svg",
+  md: "markdown-markdown-original",
+  mdx: "markdown-markdown-original",
+  markdown: "markdown-markdown-original",
   // SQL
-  sql: "azuresqldatabase/azuresqldatabase-original.svg",
+  sql: "azuresqldatabase-azuresqldatabase-original",
   // Shell
-  sh: "bash/bash-original.svg",
-  bash: "bash/bash-original.svg",
-  zsh: "bash/bash-original.svg",
-  fish: "bash/bash-original.svg",
+  sh: "bash-bash-original",
+  bash: "bash-bash-original",
+  zsh: "bash-bash-original",
+  fish: "bash-bash-original",
   // PowerShell
-  ps1: "powershell/powershell-original.svg",
-  psm1: "powershell/powershell-original.svg",
-  psd1: "powershell/powershell-original.svg",
+  ps1: "powershell-powershell-original",
+  psm1: "powershell-powershell-original",
+  psd1: "powershell-powershell-original",
   // Docker
-  dockerfile: "docker/docker-original.svg",
+  dockerfile: "docker-docker-original",
   // Git
-  gitignore: "git/git-original.svg",
-  gitattributes: "git/git-original.svg",
-  gitmodules: "git/git-original.svg",
+  gitignore: "git-git-original",
+  gitattributes: "git-git-original",
+  gitmodules: "git-git-original",
   // GraphQL
-  graphql: "graphql/graphql-plain.svg",
-  gql: "graphql/graphql-plain.svg",
+  graphql: "graphql-graphql-plain",
+  gql: "graphql-graphql-plain",
   // Vue
-  vue: "vuejs/vuejs-original.svg",
+  vue: "vuejs-vuejs-original",
   // Svelte
-  svelte: "svelte/svelte-original.svg",
+  svelte: "svelte-svelte-original",
   // Angular
-  angular: "angular/angular-original.svg",
+  angular: "angular-angular-original",
   // Terraform
-  tf: "terraform/terraform-original.svg",
-  tfvars: "terraform/terraform-original.svg",
+  tf: "terraform-terraform-original",
+  tfvars: "terraform-terraform-original",
   // Kubernetes
   // Gradle
-  gradle: "gradle/gradle-original.svg",
+  gradle: "gradle-gradle-original",
   // Maven
-  pom: "maven/maven-original.svg",
+  pom: "maven-maven-original",
   // NPM
   // Yarn
   // Webpack
   // Vite
   // ESLint
-  eslintrc: "eslint/eslint-original.svg",
+  eslintrc: "eslint-eslint-original",
   // Jest
   // Mocha
   // Cypress
@@ -174,456 +174,456 @@ const DEV_ICON_MAP: Record<string, string> = {
   // Redux
   // MobX
   // Prisma
-  prisma: "prisma/prisma-original.svg",
+  prisma: "prisma-prisma-original",
   // Nginx
-  nginx: "nginx/nginx-original.svg",
+  nginx: "nginx-nginx-original",
   // Apache
-  htaccess: "apache/apache-original.svg",
+  htaccess: "apache-apache-original",
   // Vim
-  vim: "vim/vim-original.svg",
-  vimrc: "vim/vim-original.svg",
+  vim: "vim-vim-original",
+  vimrc: "vim-vim-original",
   // Neovim
-  nvim: "neovim/neovim-original.svg",
+  nvim: "neovim-neovim-original",
   // VS Code
-  code: "vscode/vscode-original.svg",
+  code: "vscode-vscode-original",
   // Unity
-  unity: "unity/unity-original.svg",
+  unity: "unity-unity-original",
   // Unreal
   // Blender
-  blend: "blender/blender-original.svg",
+  blend: "blender-blender-original",
   // Godot
-  gd: "godot/godot-original.svg",
-  godot: "godot/godot-original.svg",
+  gd: "godot-godot-original",
+  godot: "godot-godot-original",
   // Arduino
-  ino: "arduino/arduino-original.svg",
+  ino: "arduino-arduino-original",
   // LaTeX
-  tex: "latex/latex-original.svg",
-  latex: "latex/latex-original.svg",
-  bib: "latex/latex-original.svg",
+  tex: "latex-latex-original",
+  latex: "latex-latex-original",
+  bib: "latex-latex-original",
 };
 
 /**
- * Special filenames that map to dev icons
+ * Special filenames that map to dev icons (symbol names)
  */
 const SPECIAL_FILENAME_MAP: Record<string, string> = {
   // Package managers
-  "package.json": "nodejs/nodejs-original.svg",
-  "package-lock.json": "npm/npm-original-wordmark.svg",
-  "yarn.lock": "yarn/yarn-original.svg",
-  "pnpm-lock.yaml": "pnpm/pnpm-original.svg",
-  "bun.lockb": "bun/bun-original.svg",
-  "bunfig.toml": "bun/bun-original.svg",
-  "deno.json": "denojs/denojs-original.svg",
-  "deno.jsonc": "denojs/denojs-original.svg",
-  "deno.lock": "denojs/denojs-original.svg",
+  "package.json": "nodejs-nodejs-original",
+  "package-lock.json": "npm-npm-original-wordmark",
+  "yarn.lock": "yarn-yarn-original",
+  "pnpm-lock.yaml": "pnpm-pnpm-original",
+  "bun.lockb": "bun-bun-original",
+  "bunfig.toml": "bun-bun-original",
+  "deno.json": "denojs-denojs-original",
+  "deno.jsonc": "denojs-denojs-original",
+  "deno.lock": "denojs-denojs-original",
   // Config files
-  "tsconfig.json": "typescript/typescript-original.svg",
-  "jsconfig.json": "javascript/javascript-original.svg",
-  ".eslintrc": "eslint/eslint-original.svg",
-  ".eslintrc.json": "eslint/eslint-original.svg",
-  ".eslintrc.js": "eslint/eslint-original.svg",
-  "eslint.config.js": "eslint/eslint-original.svg",
-  "eslint.config.mjs": "eslint/eslint-original.svg",
-  ".babelrc": "babel/babel-original.svg",
-  "babel.config.js": "babel/babel-original.svg",
-  "webpack.config.js": "webpack/webpack-original.svg",
-  "webpack.config.ts": "webpack/webpack-original.svg",
-  "vite.config.js": "vitejs/vitejs-original.svg",
-  "vite.config.ts": "vitejs/vitejs-original.svg",
-  "rollup.config.js": "rollup/rollup-original.svg",
-  "rollup.config.ts": "rollup/rollup-original.svg",
-  "tailwind.config.js": "tailwindcss/tailwindcss-original.svg",
-  "tailwind.config.ts": "tailwindcss/tailwindcss-original.svg",
-  "postcss.config.js": "postcss/postcss-original.svg",
-  "next.config.js": "nextjs/nextjs-original.svg",
-  "next.config.mjs": "nextjs/nextjs-original.svg",
-  "nuxt.config.js": "nuxtjs/nuxtjs-original.svg",
-  "nuxt.config.ts": "nuxtjs/nuxtjs-original.svg",
-  "svelte.config.js": "svelte/svelte-original.svg",
-  "astro.config.mjs": "astro/astro-original.svg",
-  "remix.config.js": "remix/remix-original.svg",
-  "angular.json": "angular/angular-original.svg",
-  "nest-cli.json": "nestjs/nestjs-original.svg",
+  "tsconfig.json": "typescript-typescript-original",
+  "jsconfig.json": "javascript-javascript-original",
+  ".eslintrc": "eslint-eslint-original",
+  ".eslintrc.json": "eslint-eslint-original",
+  ".eslintrc.js": "eslint-eslint-original",
+  "eslint.config.js": "eslint-eslint-original",
+  "eslint.config.mjs": "eslint-eslint-original",
+  ".babelrc": "babel-babel-original",
+  "babel.config.js": "babel-babel-original",
+  "webpack.config.js": "webpack-webpack-original",
+  "webpack.config.ts": "webpack-webpack-original",
+  "vite.config.js": "vitejs-vitejs-original",
+  "vite.config.ts": "vitejs-vitejs-original",
+  "rollup.config.js": "rollup-rollup-original",
+  "rollup.config.ts": "rollup-rollup-original",
+  "tailwind.config.js": "tailwindcss-tailwindcss-original",
+  "tailwind.config.ts": "tailwindcss-tailwindcss-original",
+  "postcss.config.js": "postcss-postcss-original",
+  "next.config.js": "nextjs-nextjs-original",
+  "next.config.mjs": "nextjs-nextjs-original",
+  "nuxt.config.js": "nuxtjs-nuxtjs-original",
+  "nuxt.config.ts": "nuxtjs-nuxtjs-original",
+  "svelte.config.js": "svelte-svelte-original",
+  "astro.config.mjs": "astro-astro-original",
+  "remix.config.js": "remix-remix-original",
+  "angular.json": "angular-angular-original",
+  "nest-cli.json": "nestjs-nestjs-original",
   // Docker
-  Dockerfile: "docker/docker-original.svg",
-  "docker-compose.yml": "docker/docker-original.svg",
-  "docker-compose.yaml": "docker/docker-original.svg",
-  ".dockerignore": "docker/docker-original.svg",
+  Dockerfile: "docker-docker-original",
+  "docker-compose.yml": "docker-docker-original",
+  "docker-compose.yaml": "docker-docker-original",
+  ".dockerignore": "docker-docker-original",
   // Git
-  ".gitignore": "git/git-original.svg",
-  ".gitattributes": "git/git-original.svg",
-  ".gitmodules": "git/git-original.svg",
+  ".gitignore": "git-git-original",
+  ".gitattributes": "git-git-original",
+  ".gitmodules": "git-git-original",
   // CI/CD
-  ".travis.yml": "travis/travis-original.svg",
-  ".gitlab-ci.yml": "gitlab/gitlab-original.svg",
-  Jenkinsfile: "jenkins/jenkins-original.svg",
-  "azure-pipelines.yml": "azure/azure-original.svg",
+  ".travis.yml": "travis-travis-original",
+  ".gitlab-ci.yml": "gitlab-gitlab-original",
+  Jenkinsfile: "jenkins-jenkins-original",
+  "azure-pipelines.yml": "azure-azure-original",
   // Rust
-  "Cargo.toml": "rust/rust-original.svg",
-  "Cargo.lock": "rust/rust-original.svg",
+  "Cargo.toml": "rust-rust-original",
+  "Cargo.lock": "rust-rust-original",
   // Python
-  "requirements.txt": "python/python-original.svg",
-  Pipfile: "python/python-original.svg",
-  "Pipfile.lock": "python/python-original.svg",
-  "pyproject.toml": "python/python-original.svg",
-  "setup.py": "python/python-original.svg",
+  "requirements.txt": "python-python-original",
+  Pipfile: "python-python-original",
+  "Pipfile.lock": "python-python-original",
+  "pyproject.toml": "python-python-original",
+  "setup.py": "python-python-original",
   // Ruby
-  Gemfile: "ruby/ruby-original.svg",
-  "Gemfile.lock": "ruby/ruby-original.svg",
-  Rakefile: "ruby/ruby-original.svg",
+  Gemfile: "ruby-ruby-original",
+  "Gemfile.lock": "ruby-ruby-original",
+  Rakefile: "ruby-ruby-original",
   // Go
-  "go.mod": "go/go-original.svg",
-  "go.sum": "go/go-original.svg",
+  "go.mod": "go-go-original",
+  "go.sum": "go-go-original",
   // Java/Gradle/Maven
-  "build.gradle": "gradle/gradle-original.svg",
-  "build.gradle.kts": "gradle/gradle-original.svg",
-  "settings.gradle": "gradle/gradle-original.svg",
-  "settings.gradle.kts": "gradle/gradle-original.svg",
-  "pom.xml": "maven/maven-original.svg",
+  "build.gradle": "gradle-gradle-original",
+  "build.gradle.kts": "gradle-gradle-original",
+  "settings.gradle": "gradle-gradle-original",
+  "settings.gradle.kts": "gradle-gradle-original",
+  "pom.xml": "maven-maven-original",
   // .NET
-  ".csproj": "csharp/csharp-original.svg",
-  ".sln": "visualstudio/visualstudio-original.svg",
-  "nuget.config": "nuget/nuget-original.svg",
+  ".csproj": "csharp-csharp-original",
+  ".sln": "visualstudio-visualstudio-original",
+  "nuget.config": "nuget-nuget-original",
   // README/Docs
-  "README.md": "markdown/markdown-original.svg",
-  "CHANGELOG.md": "markdown/markdown-original.svg",
-  "CONTRIBUTING.md": "markdown/markdown-original.svg",
-  LICENSE: "document.svg",
-  "LICENSE.md": "document.svg",
+  "README.md": "markdown-markdown-original",
+  "CHANGELOG.md": "markdown-markdown-original",
+  "CONTRIBUTING.md": "markdown-markdown-original",
+  LICENSE: "document",
+  "LICENSE.md": "document",
   // Tauri
-  "tauri.conf.json": "tauri/tauri-original.svg",
+  "tauri.conf.json": "tauri-tauri-original",
   // Biome
-  "biome.json": "biome/biome-original.svg",
-  "biome.jsonc": "biome/biome-original.svg",
+  "biome.json": "biome-biome-original",
+  "biome.jsonc": "biome-biome-original",
   // Vitest
-  "vitest.config.ts": "vitest/vitest-original.svg",
-  "vitest.config.js": "vitest/vitest-original.svg",
+  "vitest.config.ts": "vitest-vitest-original",
+  "vitest.config.js": "vitest-vitest-original",
   // Jest
-  "jest.config.js": "jest/jest-plain.svg",
-  "jest.config.ts": "jest/jest-plain.svg",
+  "jest.config.js": "jest-jest-plain",
+  "jest.config.ts": "jest-jest-plain",
   // Playwright
-  "playwright.config.ts": "playwright/playwright-original.svg",
-  "playwright.config.js": "playwright/playwright-original.svg",
+  "playwright.config.ts": "playwright-playwright-original",
+  "playwright.config.js": "playwright-playwright-original",
 };
 
 /**
- * Filetypes icons mapping for common file types
+ * Filetypes icons mapping for common file types (symbol names without icon- prefix)
  * Falls back to these when dev_icons don't have a match
  */
 const FILETYPE_ICON_MAP: Record<string, string> = {
   // Documents
-  pdf: "pdf.svg",
-  doc: "document.svg",
-  docx: "document.svg",
-  odt: "document.svg",
-  rtf: "document.svg",
-  txt: "document.svg",
+  pdf: "pdf",
+  doc: "document",
+  docx: "document",
+  odt: "document",
+  rtf: "document",
+  txt: "document",
   // Spreadsheets
-  xls: "table.svg",
-  xlsx: "table.svg",
-  csv: "table.svg",
-  ods: "table.svg",
+  xls: "table",
+  xlsx: "table",
+  csv: "table",
+  ods: "table",
   // Presentations
-  ppt: "powerpoint.svg",
-  pptx: "powerpoint.svg",
-  odp: "powerpoint.svg",
+  ppt: "powerpoint",
+  pptx: "powerpoint",
+  odp: "powerpoint",
   // Images
-  png: "image.svg",
-  jpg: "image.svg",
-  jpeg: "image.svg",
-  gif: "image.svg",
-  bmp: "image.svg",
-  webp: "image.svg",
-  svg: "svg.svg",
-  ico: "image.svg",
-  tiff: "image.svg",
-  tif: "image.svg",
-  psd: "adobe-photoshop.svg",
-  ai: "adobe-illustrator.svg",
+  png: "image",
+  jpg: "image",
+  jpeg: "image",
+  gif: "image",
+  bmp: "image",
+  webp: "image",
+  svg: "svg",
+  ico: "image",
+  tiff: "image",
+  tif: "image",
+  psd: "adobe-photoshop",
+  ai: "adobe-illustrator",
   // Audio
-  mp3: "audio.svg",
-  wav: "audio.svg",
-  flac: "audio.svg",
-  ogg: "audio.svg",
-  m4a: "audio.svg",
-  aac: "audio.svg",
-  wma: "audio.svg",
+  mp3: "audio",
+  wav: "audio",
+  flac: "audio",
+  ogg: "audio",
+  m4a: "audio",
+  aac: "audio",
+  wma: "audio",
   // Video
-  mp4: "video.svg",
-  mkv: "video.svg",
-  avi: "video.svg",
-  mov: "video.svg",
-  wmv: "video.svg",
-  webm: "video.svg",
-  flv: "video.svg",
-  m4v: "video.svg",
+  mp4: "video",
+  mkv: "video",
+  avi: "video",
+  mov: "video",
+  wmv: "video",
+  webm: "video",
+  flv: "video",
+  m4v: "video",
   // Archives
-  zip: "folder-zip.svg",
-  rar: "folder-zip.svg",
-  "7z": "folder-zip.svg",
-  tar: "folder-zip.svg",
-  gz: "folder-zip.svg",
-  bz2: "folder-zip.svg",
-  xz: "folder-zip.svg",
+  zip: "zip",
+  rar: "zip",
+  "7z": "zip",
+  tar: "zip",
+  gz: "zip",
+  bz2: "zip",
+  xz: "zip",
   // Executables
-  exe: "exe.svg",
-  msi: "exe.svg",
-  bat: "command.svg",
-  cmd: "command.svg",
-  com: "exe.svg",
+  exe: "exe",
+  msi: "exe",
+  bat: "command",
+  cmd: "command",
+  com: "exe",
   // System
-  dll: "dll.svg",
-  sys: "settings.svg",
-  ini: "settings.svg",
-  cfg: "settings.svg",
-  conf: "settings.svg",
+  dll: "dll",
+  sys: "settings",
+  ini: "settings",
+  cfg: "settings",
+  conf: "settings",
   // Fonts
-  ttf: "font.svg",
-  otf: "font.svg",
-  woff: "font.svg",
-  woff2: "font.svg",
-  eot: "font.svg",
+  ttf: "font",
+  otf: "font",
+  woff: "font",
+  woff2: "font",
+  eot: "font",
   // Database
-  db: "database.svg",
-  sqlite: "database.svg",
-  sqlite3: "database.svg",
+  db: "database",
+  sqlite: "database",
+  sqlite3: "database",
   // Certificates
-  pem: "certificate.svg",
-  crt: "certificate.svg",
-  cer: "certificate.svg",
-  key: "key.svg",
+  pem: "certificate",
+  crt: "certificate",
+  cer: "certificate",
+  key: "key",
   // Logs
-  log: "log.svg",
+  log: "log",
   // Lock files
-  lock: "lock.svg",
+  lock: "lock",
   // Notebooks
-  ipynb: "jupyter.svg",
+  ipynb: "jupyter",
 };
 
 /**
- * Folder icon mapping based on folder name
+ * Folder icon mapping based on folder name (symbol names without icon- prefix)
  */
 const FOLDER_ICON_MAP: Record<string, string> = {
   // Common folders
-  src: "folder-src.svg",
-  source: "folder-src.svg",
-  lib: "folder-lib.svg",
-  libs: "folder-lib.svg",
-  dist: "folder-dist.svg",
-  build: "folder-dist.svg",
-  out: "folder-dist.svg",
-  output: "folder-dist.svg",
-  bin: "folder-dist.svg",
-  node_modules: "folder-node.svg",
-  vendor: "folder-lib.svg",
-  packages: "folder-packages.svg",
+  src: "folder-src",
+  source: "folder-src",
+  lib: "folder-lib",
+  libs: "folder-lib",
+  dist: "folder-dist",
+  build: "folder-dist",
+  out: "folder-dist",
+  output: "folder-dist",
+  bin: "folder-dist",
+  node_modules: "folder-node",
+  vendor: "folder-lib",
+  packages: "folder-packages",
   // Config
-  config: "folder-config.svg",
-  configs: "folder-config.svg",
-  configuration: "folder-config.svg",
-  settings: "folder-config.svg",
+  config: "folder-config",
+  configs: "folder-config",
+  configuration: "folder-config",
+  settings: "folder-config",
   // Tests
-  test: "folder-test.svg",
-  tests: "folder-test.svg",
-  __tests__: "folder-test.svg",
-  spec: "folder-test.svg",
-  specs: "folder-test.svg",
+  test: "folder-test",
+  tests: "folder-test",
+  __tests__: "folder-test",
+  spec: "folder-test",
+  specs: "folder-test",
   // Documentation
-  docs: "folder-docs.svg",
-  doc: "folder-docs.svg",
-  documentation: "folder-docs.svg",
+  docs: "folder-docs",
+  doc: "folder-docs",
+  documentation: "folder-docs",
   // Assets
-  assets: "folder-images.svg",
-  images: "folder-images.svg",
-  img: "folder-images.svg",
-  icons: "folder-images.svg",
-  fonts: "folder-font.svg",
-  media: "folder-video.svg",
-  audio: "folder-audio.svg",
-  video: "folder-video.svg",
+  assets: "folder-images",
+  images: "folder-images",
+  img: "folder-images",
+  icons: "folder-images",
+  fonts: "folder-font",
+  media: "folder-video",
+  audio: "folder-audio",
+  video: "folder-video",
   // Styles
-  styles: "folder-css.svg",
-  css: "folder-css.svg",
-  scss: "folder-sass.svg",
-  sass: "folder-sass.svg",
-  less: "folder-less.svg",
+  styles: "folder-css",
+  css: "folder-css",
+  scss: "folder-sass",
+  sass: "folder-sass",
+  less: "folder-less",
   // Scripts
-  scripts: "folder-scripts.svg",
+  scripts: "folder-scripts",
   // Components
-  components: "folder-components.svg",
-  component: "folder-components.svg",
+  components: "folder-components",
+  component: "folder-components",
   // Pages/Views
-  pages: "folder-views.svg",
-  views: "folder-views.svg",
-  screens: "folder-views.svg",
+  pages: "folder-views",
+  views: "folder-views",
+  screens: "folder-views",
   // API
-  api: "folder-api.svg",
-  apis: "folder-api.svg",
+  api: "folder-api",
+  apis: "folder-api",
   // Services
-  services: "folder-server.svg",
-  service: "folder-server.svg",
+  services: "folder-server",
+  service: "folder-server",
   // Hooks
-  hooks: "folder-hook.svg",
-  hook: "folder-hook.svg",
+  hooks: "folder-hook",
+  hook: "folder-hook",
   // Utils
-  utils: "folder-utils.svg",
-  util: "folder-utils.svg",
-  utilities: "folder-utils.svg",
-  helpers: "folder-helper.svg",
-  helper: "folder-helper.svg",
+  utils: "folder-utils",
+  util: "folder-utils",
+  utilities: "folder-utils",
+  helpers: "folder-helper",
+  helper: "folder-helper",
   // Types
-  types: "folder-typescript.svg",
-  typings: "folder-typescript.svg",
-  interfaces: "folder-interface.svg",
+  types: "folder-typescript",
+  typings: "folder-typescript",
+  interfaces: "folder-interface",
   // Models
-  models: "folder-database.svg",
-  model: "folder-database.svg",
-  entities: "folder-database.svg",
-  schemas: "folder-database.svg",
+  models: "folder-database",
+  model: "folder-database",
+  entities: "folder-database",
+  schemas: "folder-database",
   // Controllers
-  controllers: "folder-controller.svg",
-  controller: "folder-controller.svg",
+  controllers: "folder-controller",
+  controller: "folder-controller",
   // Middleware
-  middleware: "folder-middleware.svg",
-  middlewares: "folder-middleware.svg",
+  middleware: "folder-middleware",
+  middlewares: "folder-middleware",
   // Routes
-  routes: "folder-routes.svg",
-  router: "folder-routes.svg",
-  routing: "folder-routes.svg",
+  routes: "folder-routes",
+  router: "folder-routes",
+  routing: "folder-routes",
   // State/Store
-  store: "folder-store.svg",
-  stores: "folder-store.svg",
-  state: "folder-store.svg",
-  redux: "folder-redux-reducer.svg",
+  store: "folder-store",
+  stores: "folder-store",
+  state: "folder-store",
+  redux: "folder-redux-reducer",
   // Context
-  context: "folder-context.svg",
-  contexts: "folder-context.svg",
-  providers: "folder-context.svg",
+  context: "folder-context",
+  contexts: "folder-context",
+  providers: "folder-context",
   // Public
-  public: "folder-public.svg",
-  static: "folder-public.svg",
+  public: "folder-public",
+  static: "folder-public",
   // Private
-  private: "folder-private.svg",
+  private: "folder-private",
   // Git
-  ".git": "folder-git.svg",
+  ".git": "folder-git",
   // GitHub
-  ".github": "folder-github.svg",
+  ".github": "folder-github",
   // VSCode
-  ".vscode": "folder-vscode.svg",
+  ".vscode": "folder-vscode",
   // IDE
-  ".idea": "folder-intellij.svg",
+  ".idea": "folder-intellij",
   // CI/CD
-  ".circleci": "folder-circleci.svg",
+  ".circleci": "folder-circleci",
   // Docker
-  docker: "folder-docker.svg",
+  docker: "folder-docker",
   // Kubernetes
-  kubernetes: "folder-kubernetes.svg",
-  k8s: "folder-kubernetes.svg",
+  kubernetes: "folder-kubernetes",
+  k8s: "folder-kubernetes",
   // Terraform
-  terraform: "folder-terraform.svg",
+  terraform: "folder-terraform",
   // Ansible
-  ansible: "folder-ansible.svg",
+  ansible: "folder-ansible",
   // AWS
-  aws: "folder-aws.svg",
+  aws: "folder-aws",
   // Azure
-  azure: "folder-azure-pipelines.svg",
+  azure: "folder-azure-pipelines",
   // Logs
-  logs: "folder-log.svg",
-  log: "folder-log.svg",
+  logs: "folder-log",
+  log: "folder-log",
   // Temp
-  tmp: "folder-temp.svg",
-  temp: "folder-temp.svg",
-  cache: "folder-temp.svg",
-  ".cache": "folder-temp.svg",
+  tmp: "folder-temp",
+  temp: "folder-temp",
+  cache: "folder-temp",
+  ".cache": "folder-temp",
   // Backup
-  backup: "folder-backup.svg",
-  backups: "folder-backup.svg",
+  backup: "folder-backup",
+  backups: "folder-backup",
   // Archive
-  archive: "folder-archive.svg",
-  archives: "folder-archive.svg",
+  archive: "folder-archive",
+  archives: "folder-archive",
   // Download
-  downloads: "folder-download.svg",
-  download: "folder-download.svg",
+  downloads: "folder-download",
+  download: "folder-download",
   // Upload
-  uploads: "folder-upload.svg",
-  upload: "folder-upload.svg",
+  uploads: "folder-upload",
+  upload: "folder-upload",
   // Localization
-  i18n: "folder-i18n.svg",
-  l10n: "folder-i18n.svg",
-  locales: "folder-i18n.svg",
-  locale: "folder-i18n.svg",
-  translations: "folder-i18n.svg",
+  i18n: "folder-i18n",
+  l10n: "folder-i18n",
+  locales: "folder-i18n",
+  locale: "folder-i18n",
+  translations: "folder-i18n",
   // Templates
-  templates: "folder-template.svg",
-  template: "folder-template.svg",
+  templates: "folder-template",
+  template: "folder-template",
   // Layouts
-  layouts: "folder-layout.svg",
-  layout: "folder-layout.svg",
+  layouts: "folder-layout",
+  layout: "folder-layout",
   // Plugins
-  plugins: "folder-plugin.svg",
-  plugin: "folder-plugin.svg",
-  extensions: "folder-plugin.svg",
-  addons: "folder-plugin.svg",
+  plugins: "folder-plugin",
+  plugin: "folder-plugin",
+  extensions: "folder-plugin",
+  addons: "folder-plugin",
   // Modules
-  modules: "folder-lib.svg",
-  module: "folder-lib.svg",
+  modules: "folder-lib",
+  module: "folder-lib",
   // Examples
-  examples: "folder-examples.svg",
-  example: "folder-examples.svg",
-  samples: "folder-examples.svg",
-  sample: "folder-examples.svg",
-  demo: "folder-examples.svg",
-  demos: "folder-examples.svg",
+  examples: "folder-examples",
+  example: "folder-examples",
+  samples: "folder-examples",
+  sample: "folder-examples",
+  demo: "folder-examples",
+  demos: "folder-examples",
   // Fixtures
-  fixtures: "folder-mock.svg",
-  fixture: "folder-mock.svg",
-  mocks: "folder-mock.svg",
-  mock: "folder-mock.svg",
-  __mocks__: "folder-mock.svg",
+  fixtures: "folder-mock",
+  fixture: "folder-mock",
+  mocks: "folder-mock",
+  mock: "folder-mock",
+  __mocks__: "folder-mock",
   // Snapshots
-  __snapshots__: "folder-test.svg",
-  snapshots: "folder-test.svg",
+  __snapshots__: "folder-test",
+  snapshots: "folder-test",
   // Storybook
-  ".storybook": "folder-storybook.svg",
-  stories: "folder-storybook.svg",
+  ".storybook": "folder-storybook",
+  stories: "folder-storybook",
   // Prisma
-  prisma: "folder-prisma.svg",
+  prisma: "folder-prisma",
   // Migrations
-  migrations: "folder-migrations.svg",
-  migration: "folder-migrations.svg",
+  migrations: "folder-migrations",
+  migration: "folder-migrations",
   // Seeds
-  seeds: "folder-seeders.svg",
-  seeders: "folder-seeders.svg",
+  seeds: "folder-seeders",
+  seeders: "folder-seeders",
   // Husky
-  ".husky": "folder-husky.svg",
+  ".husky": "folder-husky",
   // Tauri
-  "src-tauri": "folder-src-tauri.svg",
+  "src-tauri": "folder-src-tauri",
   // Next.js
-  ".next": "folder-next.svg",
+  ".next": "folder-next",
   // Nuxt
-  ".nuxt": "folder-nuxt.svg",
+  ".nuxt": "folder-nuxt",
   // Svelte
-  ".svelte-kit": "folder-svelte.svg",
+  ".svelte-kit": "folder-svelte",
   // Android
-  android: "folder-android.svg",
+  android: "folder-android",
   // iOS
-  ios: "folder-ios.svg",
+  ios: "folder-ios",
   // React Native
   // Flutter
-  flutter: "folder-flutter.svg",
+  flutter: "folder-flutter",
   // Supabase
-  supabase: "folder-supabase.svg",
+  supabase: "folder-supabase",
   // Vercel
-  ".vercel": "folder-vercel.svg",
+  ".vercel": "folder-vercel",
   // Netlify
-  ".netlify": "folder-netlify.svg",
+  ".netlify": "folder-netlify",
   // Drizzle
-  drizzle: "folder-drizzle.svg",
+  drizzle: "folder-drizzle",
 };
 
 export interface IconInfo {
-  /** Full path to the icon SVG */
-  path: string;
+  /** Symbol name for the sprite (use with SvgIcon name prop) */
+  symbolName: string;
   /** Icon category: 'dev' | 'filetype' | 'ui' */
   category: "dev" | "filetype" | "ui";
   /** Whether this is a folder icon */
@@ -648,7 +648,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
   // Symlinks and Junctions use special UI icons
   if (entry.kind === "symlink") {
     return {
-      path: `${UI}/ic_link.svg`,
+      symbolName: "ic_link",
       category: "ui",
       isFolder: false,
     };
@@ -656,7 +656,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
 
   if (entry.kind === "junction") {
     return {
-      path: `${UI}/ic_folder_link.svg`,
+      symbolName: "ic_folder_link",
       category: "ui",
       isFolder: false,
     };
@@ -665,7 +665,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
   // Check special filenames first (highest priority for files)
   if (SPECIAL_FILENAME_MAP[name]) {
     return {
-      path: `${DEV_ICONS}/${SPECIAL_FILENAME_MAP[name]}`,
+      symbolName: SPECIAL_FILENAME_MAP[name],
       category: "dev",
       isFolder: false,
     };
@@ -676,7 +676,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
   for (const [key, value] of Object.entries(SPECIAL_FILENAME_MAP)) {
     if (key.toLowerCase() === lowerName) {
       return {
-        path: `${DEV_ICONS}/${value}`,
+        symbolName: value,
         category: "dev",
         isFolder: false,
       };
@@ -686,7 +686,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
   // Check dev icons by extension
   if (ext && DEV_ICON_MAP[ext]) {
     return {
-      path: `${DEV_ICONS}/${DEV_ICON_MAP[ext]}`,
+      symbolName: DEV_ICON_MAP[ext],
       category: "dev",
       isFolder: false,
     };
@@ -695,7 +695,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
   // Check filetypes icons
   if (ext && FILETYPE_ICON_MAP[ext]) {
     return {
-      path: `${FILETYPES}/${FILETYPE_ICON_MAP[ext]}`,
+      symbolName: FILETYPE_ICON_MAP[ext],
       category: "filetype",
       isFolder: false,
     };
@@ -703,7 +703,7 @@ export function getIconForEntry(entry: EntryMeta, isOpen = false): IconInfo {
 
   // Default file icon
   return {
-    path: `${FILETYPES}/document.svg`,
+    symbolName: "document",
     category: "filetype",
     isFolder: false,
   };
@@ -717,9 +717,9 @@ function getFolderIcon(folderName: string, isOpen: boolean): IconInfo {
 
   if (iconName) {
     // Use open variant if available
-    const openIconName = isOpen ? iconName.replace(".svg", "-open.svg") : iconName;
+    const openIconName = isOpen ? `${iconName}-open` : iconName;
     return {
-      path: `${FILETYPES}/${openIconName}`,
+      symbolName: openIconName,
       category: "filetype",
       isFolder: true,
       isOpen,
@@ -728,7 +728,7 @@ function getFolderIcon(folderName: string, isOpen: boolean): IconInfo {
 
   // Default folder icon
   return {
-    path: isOpen ? `${FILETYPES}/folder-base-open.svg` : `${FILETYPES}/folder-base.svg`,
+    symbolName: isOpen ? "folder-base-open" : "folder-base",
     category: "filetype",
     isFolder: true,
     isOpen,
@@ -736,26 +736,26 @@ function getFolderIcon(folderName: string, isOpen: boolean): IconInfo {
 }
 
 /**
- * Get a drive icon path
+ * Get a drive icon symbol name
  */
-export function getDriveIconPath(driveType: string): string {
+export function getDriveIconName(driveType: string): string {
   switch (driveType) {
     case "Removable":
-      return `${UI}/ic_usb_stick.svg`;
+      return "ic_usb_stick";
     case "Network":
-      return `${UI}/ic_globe.svg`;
+      return "ic_globe";
     case "CdRom":
-      return `${UI}/ic_disc.svg`;
+      return "ic_disc";
     case "RamDisk":
-      return `${UI}/ic_storage.svg`;
+      return "ic_storage";
     default:
-      return `${UI}/ic_hard_drive.svg`;
+      return "ic_hard_drive";
   }
 }
 
 /**
- * Get UI icon path by name
+ * Get UI icon symbol name
  */
-export function getUiIconPath(iconName: string): string {
-  return `${UI}/ic_${iconName}.svg`;
+export function getUiIconName(iconName: string): string {
+  return `ic_${iconName}`;
 }

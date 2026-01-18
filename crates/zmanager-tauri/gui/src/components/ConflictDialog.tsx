@@ -87,11 +87,7 @@ function FileInfoCard({ file, label }: FileInfoCardProps) {
       <p className="mb-2 font-medium text-xs text-zinc-400 uppercase tracking-wider">{label}</p>
       <div className="flex items-start gap-3">
         <SvgIcon
-          src={
-            file.isDirectory
-              ? "/icons/filetypes/folder_type_folder.svg"
-              : "/icons/filetypes/file_type_default.svg"
-          }
+          name={file.isDirectory ? "folder_type_folder" : "file_type_default"}
           size={32}
           alt={file.isDirectory ? "Folder" : "File"}
         />
@@ -157,12 +153,7 @@ export function ConflictDialog({ conflict, remainingConflicts, onResolve }: Conf
       >
         {/* Header */}
         <div className="mb-4 flex items-center gap-3">
-          <SvgIcon
-            src="/icons/ui/ic_warning.svg"
-            size={24}
-            alt="Warning"
-            className="text-yellow-500"
-          />
+          <SvgIcon name="ic_warning" size={24} alt="Warning" className="text-yellow-500" />
           <h2 id="conflict-dialog-title" className="font-semibold text-lg">
             File Already Exists
           </h2>

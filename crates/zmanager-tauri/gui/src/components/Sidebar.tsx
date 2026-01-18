@@ -32,7 +32,7 @@ import {
   useUIStore,
 } from "../stores";
 import type { DriveInfo } from "../types";
-import { getDriveIconPath, getUiIconPath } from "../utils/iconMappings";
+import { getDriveIconName, getUiIconName } from "../utils/iconMappings";
 import { SvgIcon } from "./SvgIcon";
 
 /** Format bytes to human-readable string */
@@ -67,7 +67,7 @@ function SectionHeader({
       className="flex w-full items-center gap-2 px-3 py-2 text-left font-semibold text-xs text-zinc-400 uppercase tracking-wider hover:text-zinc-200"
     >
       <span className={`transition-transform ${isExpanded ? "rotate-90" : ""}`}>
-        <SvgIcon src={getUiIconPath("chevron_right")} size={12} alt="" />
+        <SvgIcon name={getUiIconName("chevron_right")} size={12} />
       </span>
       {title}
     </button>
@@ -81,7 +81,7 @@ function DriveItem({ drive, onClick }: { drive: DriveInfo; onClick: (path: strin
       ? ((drive.total_bytes - drive.free_bytes) / drive.total_bytes) * 100
       : null;
 
-  const driveIconPath = getDriveIconPath(drive.drive_type);
+  const driveIconName = getDriveIconName(drive.drive_type);
 
   return (
     <button
@@ -90,7 +90,7 @@ function DriveItem({ drive, onClick }: { drive: DriveInfo; onClick: (path: strin
       className="flex w-full flex-col gap-1 rounded px-3 py-2 text-left hover:bg-white/5"
     >
       <div className="flex items-center gap-2">
-        <SvgIcon src={driveIconPath} size={16} alt={drive.drive_type} />
+        <SvgIcon name={driveIconName} size={16} />
         <span className="flex-1 truncate text-sm">
           {drive.label || "Local Disk"} ({drive.path.replace("\\", "")})
         </span>
@@ -148,7 +148,7 @@ function FavoriteContextMenu({
         }}
         className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-red-400 text-sm hover:bg-white/5"
       >
-        <SvgIcon src={getUiIconPath("close")} size={14} alt="" />
+        <SvgIcon name={getUiIconName("close")} size={14} />
         Remove from Quick Access
       </button>
     </div>
@@ -175,8 +175,8 @@ function SortableFavoriteItem({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  // Map icon name to path, with fallback to folder
-  const iconPath = favorite.icon ? getUiIconPath(favorite.icon) : getUiIconPath("folder");
+  // Map icon name to symbol name, with fallback to folder
+  const iconName = favorite.icon ? getUiIconName(favorite.icon) : getUiIconName("folder");
 
   return (
     <button
@@ -191,7 +191,7 @@ function SortableFavoriteItem({
         !favorite.is_valid ? "text-zinc-500 line-through" : ""
       }`}
     >
-      <SvgIcon src={iconPath} size={16} alt={favorite.name} />
+      <SvgIcon name={iconName} size={16} />
       <span className="truncate">{favorite.name}</span>
     </button>
   );

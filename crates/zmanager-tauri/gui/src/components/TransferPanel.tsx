@@ -68,11 +68,11 @@ function formatEta(bytesRemaining: number, speed: number): string {
 function getJobIcon(type: TransferJob["type"]): string {
   switch (type) {
     case "copy":
-      return "/icons/ui/ic_copy.svg";
+      return "ic_copy";
     case "move":
-      return "/icons/ui/ic_move.svg";
+      return "ic_move";
     case "delete":
-      return "/icons/ui/ic_trash.svg";
+      return "ic_trash";
   }
 }
 
@@ -115,7 +115,7 @@ function JobItem({ job, onPause, onResume, onCancel, onDismiss }: JobItemProps) 
     <div className="rounded-lg bg-zinc-800/50 p-3 ring-1 ring-white/5">
       {/* Header */}
       <div className="mb-2 flex items-center gap-2">
-        <SvgIcon src={getJobIcon(job.type)} size={16} alt={job.type} />
+        <SvgIcon name={getJobIcon(job.type)} size={16} />
         <span className="flex-1 truncate font-medium text-sm capitalize">{job.type}</span>
         <span
           className={clsx(
@@ -243,11 +243,7 @@ export function TransferPanel({
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-white/5"
       >
-        <SvgIcon
-          src={`/icons/ui/ic_chevron_${isExpanded ? "down" : "right"}.svg`}
-          size={14}
-          alt={isExpanded ? "Collapse" : "Expand"}
-        />
+        <SvgIcon name={isExpanded ? "ic_chevron_down" : "ic_chevron_right"} size={14} />
         <span className="flex-1 font-medium text-sm">Transfers ({activeJobs.length} active)</span>
         {completedJobs.length > 0 && (
           <button

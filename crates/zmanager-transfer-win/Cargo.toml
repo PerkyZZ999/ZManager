@@ -1,0 +1,23 @@
+[package]
+name = "zmanager-transfer-win"
+description = "Windows file transfer engine using CopyFileEx"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+zmanager-core = { path = "../zmanager-core" }
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+windows.workspace = true
+walkdir.workspace = true
+dirs = "6"
+
+[dev-dependencies]
+serial_test = "3.3.1"
+tempfile = "3"

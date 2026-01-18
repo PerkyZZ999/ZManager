@@ -1,0 +1,67 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/zmanager-core",
+    "crates/zmanager-transfer-win",
+    "crates/zmanager-tui",
+]
+# Tauri crate requires full GUI setup - built separately
+exclude = ["crates/zmanager-tauri"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["ZManager Contributors"]
+license = "MIT"
+repository = "https://github.com/your-username/zmanager"
+rust-version = "1.85"
+
+[workspace.dependencies]
+# Core dependencies
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# File system
+walkdir = "2"
+notify = "7"
+
+# Configuration
+toml = "0.8"
+directories = "5"
+
+# Date/time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Windows-specific
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Com",
+    "Win32_System_DataExchange",
+    "Win32_System_Memory",
+    "Win32_System_Ole",
+    "Win32_UI_Shell",
+    "Win32_Security",
+    "Win32_System_IO",
+] }
+
+# TUI
+ratatui = "0.29"
+crossterm = "0.28"
+
+# CLI/error handling
+anyhow = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+[profile.dev]
+# Faster compile times during development
+incremental = true

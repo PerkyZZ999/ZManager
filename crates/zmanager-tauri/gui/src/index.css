@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/*
+ * ZManager Theme Configuration
+ * Based on the design mockups with custom color palette
+ */
+
+@theme {
+  /* Primary Brand Color */
+  --color-primary: #FED8B2;
+
+  /* Background Colors */
+  --color-bg-primary: #323232;
+  --color-bg-secondary: #1C1C1C;
+  --color-bg-tertiary: #252526;
+  --color-bg-elevated: #2D2D30;
+  --color-bg-input: #3C3C3C;
+
+  /* Text Colors */
+  --color-text-primary: #CCCCCC;
+  --color-text-secondary: #9D9D9D;
+  --color-text-muted: #6E6E6E;
+
+  /* Border Colors */
+  --color-border-default: #3C3C3C;
+  --color-border-subtle: #252526;
+
+  /* Status Colors */
+  --color-status-error: #F14C4C;
+  --color-status-warning: #CCA700;
+  --color-status-success: #3FB950;
+  --color-status-info: #3794FF;
+
+  /* Extended zinc shades for dark theme */
+  --color-zinc-850: #1f1f23;
+
+  /* Font Families */
+  --font-family-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Fira Code", "Cascadia Code", "JetBrains Mono", monospace;
+}
+
+/*
+ * Base Styles
+ */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent text selection on UI elements */
+.select-none {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4c4c4c;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Monospace text */
+.font-mono {
+  font-family: var(--font-family-mono);
+}
+
+/* Background utility for zinc-850 */
+.bg-zinc-850 {
+  background-color: var(--color-zinc-850);
+}
+
+/* Toast slide-in animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.2s ease-out;
+}
+
+/* Drop zone highlight */
+.drop-zone-active {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: -2px;
+  background-color: rgba(254, 216, 178, 0.05);
+}

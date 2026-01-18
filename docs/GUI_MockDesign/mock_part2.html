@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZManager - Developer Context</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#faddb7",
+                        "primary-hover": "#e6cba6",
+                        "background-light": "#f9fafa",
+                        "background-dark": "#202020", 
+                        "surface-dark": "#2b2b2b",
+                        "surface-highlight": "#3a3a3a",
+                        "border-dark": "#454545",
+                        "text-muted": "#a3a3a3",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                        'context': '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .glass-panel {
+            background: rgba(43, 43, 43, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white overflow-hidden h-screen flex flex-col select-none">
+<!-- Top Navigation Bar -->
+<header class="h-14 flex items-center justify-between px-4 bg-surface-dark border-b border-border-dark shrink-0 z-20">
+<div class="flex items-center gap-4">
+<!-- Logo -->
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl">folder_managed</span>
+<h1 class="text-lg font-bold tracking-tight text-white">ZManager</h1>
+</div>
+<!-- Navigation Controls -->
+<div class="flex items-center gap-1 ml-6 text-text-muted">
+<button class="p-1 hover:bg-white/5 rounded transition-colors disabled:opacity-30">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+</button>
+<button class="p-1 hover:bg-white/5 rounded transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+<button class="p-1 hover:bg-white/5 rounded transition-colors">
+<span class="material-symbols-outlined text-xl">arrow_upward</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="flex-1 max-w-xl mx-4">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted group-focus-within:text-primary transition-colors text-xl">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-1.5 bg-[#1a1a1a] border border-border-dark rounded-lg leading-5 text-sm placeholder-text-muted focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-white" placeholder="Search ZManager" type="text"/>
+</div>
+</div>
+<!-- Window Controls / User -->
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-white/5 rounded-lg text-text-muted hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-orange-600 border border-white/10" data-alt="User avatar gradient"></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Side Navigation -->
+<nav class="w-64 bg-surface-dark flex flex-col border-r border-border-dark shrink-0 py-4">
+<div class="px-4 mb-4">
+<h2 class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Favorites</h2>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/5 text-primary" href="#">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">desktop_windows</span>
+<span class="text-sm font-medium">Desktop</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">download</span>
+<span class="text-sm font-medium">Downloads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">description</span>
+<span class="text-sm font-medium">Documents</span>
+</a>
+</div>
+</div>
+<div class="px-4 mt-2">
+<h2 class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Drives</h2>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">hard_drive</span>
+<div class="flex flex-col">
+<span class="text-sm font-medium">Local Disk (C:)</span>
+<div class="w-24 h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-primary w-[70%] rounded-full"></div>
+</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dns</span>
+<span class="text-sm font-medium">Network</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area (Dual Pane) -->
+<main class="flex-1 flex flex-col bg-background-dark relative">
+<!-- Breadcrumbs -->
+<div class="h-10 border-b border-border-dark flex items-center px-4 bg-background-dark text-sm">
+<div class="flex items-center gap-2 text-text-muted hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">folder_open</span>
+</div>
+<span class="mx-2 text-border-dark">/</span>
+<span class="text-text-muted hover:text-primary cursor-pointer transition-colors">Projects</span>
+<span class="mx-2 text-border-dark">/</span>
+<span class="text-text-muted hover:text-primary cursor-pointer transition-colors">Development</span>
+<span class="mx-2 text-border-dark">/</span>
+<span class="text-primary font-medium bg-primary/10 px-2 py-0.5 rounded border border-primary/20">Source</span>
+</div>
+<!-- Split View Container -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Grid View (Assets) -->
+<div class="w-1/2 flex flex-col border-r border-border-dark p-4 overflow-y-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-medium text-text-muted">Assets Grid</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-text-muted text-lg cursor-pointer hover:text-white">grid_view</span>
+</div>
+</div>
+<div class="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-4">
+<!-- Folder Item -->
+<div class="group flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/5 cursor-pointer border border-transparent hover:border-white/10 transition-all">
+<span class="material-symbols-outlined text-5xl text-primary drop-shadow-lg group-hover:scale-105 transition-transform">folder</span>
+<span class="text-sm text-center text-white/90 truncate w-full">Images</span>
+</div>
+<!-- File Item (Cut State) -->
+<div class="group flex flex-col items-center gap-2 p-3 rounded-xl bg-black/20 cursor-pointer border-2 border-dashed border-primary/30 opacity-60 hover:opacity-80 transition-all relative">
+<div class="absolute top-2 right-2 bg-primary/20 p-1 rounded-full">
+<span class="material-symbols-outlined text-xs text-primary">content_cut</span>
+</div>
+<span class="material-symbols-outlined text-5xl text-blue-400 drop-shadow-lg">image</span>
+<span class="text-sm text-center text-white/90 truncate w-full">logo.png</span>
+</div>
+<!-- File Item -->
+<div class="group flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/5 cursor-pointer border border-transparent hover:border-white/10 transition-all">
+<span class="material-symbols-outlined text-5xl text-purple-400 drop-shadow-lg group-hover:scale-105 transition-transform">css</span>
+<span class="text-sm text-center text-white/90 truncate w-full">styles.css</span>
+</div>
+<!-- File Item -->
+<div class="group flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/5 cursor-pointer border border-transparent hover:border-white/10 transition-all">
+<span class="material-symbols-outlined text-5xl text-green-400 drop-shadow-lg group-hover:scale-105 transition-transform">terminal</span>
+<span class="text-sm text-center text-white/90 truncate w-full">script.sh</span>
+</div>
+</div>
+</div>
+<!-- Right Pane: Details View (Code) -->
+<div class="w-1/2 flex flex-col p-0 overflow-y-auto relative bg-[#1c1c1c]">
+<!-- Header -->
+<div class="grid grid-cols-12 gap-2 px-4 py-2 border-b border-border-dark bg-surface-dark sticky top-0 text-xs font-semibold text-text-muted uppercase tracking-wide z-10">
+<div class="col-span-5 hover:text-white cursor-pointer flex items-center gap-1">Name <span class="material-symbols-outlined text-sm">arrow_drop_down</span></div>
+<div class="col-span-2 hover:text-white cursor-pointer">Ext</div>
+<div class="col-span-2 hover:text-white cursor-pointer text-right">Size</div>
+<div class="col-span-3 hover:text-white cursor-pointer text-right">Modified</div>
+</div>
+<!-- Row 1 -->
+<div class="grid grid-cols-12 gap-2 px-4 py-3 items-center hover:bg-white/5 cursor-pointer border-b border-white/5 group">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-yellow-400">javascript</span>
+<span class="text-sm text-white font-medium group-hover:text-primary transition-colors">app.js</span>
+</div>
+<div class="col-span-2 text-sm text-text-muted">js</div>
+<div class="col-span-2 text-sm text-text-muted text-right">12 KB</div>
+<div class="col-span-3 text-sm text-text-muted text-right">Today 10:00 AM</div>
+</div>
+<!-- Row 2 (Active Context) -->
+<div class="grid grid-cols-12 gap-2 px-4 py-3 items-center bg-surface-highlight border-l-2 border-primary cursor-pointer relative">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-400">code</span>
+<span class="text-sm text-white font-medium">main.py</span>
+</div>
+<div class="col-span-2 text-sm text-white/70">py</div>
+<div class="col-span-2 text-sm text-white/70 text-right">4 KB</div>
+<div class="col-span-3 text-sm text-white/70 text-right">Today 09:15 AM</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 gap-2 px-4 py-3 items-center hover:bg-white/5 cursor-pointer border-b border-white/5 group">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400">info</span>
+<span class="text-sm text-white font-medium group-hover:text-primary transition-colors">readme.md</span>
+</div>
+<div class="col-span-2 text-sm text-text-muted">md</div>
+<div class="col-span-2 text-sm text-text-muted text-right">1 KB</div>
+<div class="col-span-3 text-sm text-text-muted text-right">Yesterday</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-12 gap-2 px-4 py-3 items-center hover:bg-white/5 cursor-pointer border-b border-white/5 group">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-orange-400">folder_zip</span>
+<span class="text-sm text-white font-medium group-hover:text-primary transition-colors">backup.zip</span>
+</div>
+<div class="col-span-2 text-sm text-text-muted">zip</div>
+<div class="col-span-2 text-sm text-text-muted text-right">24 MB</div>
+<div class="col-span-3 text-sm text-text-muted text-right">Last Week</div>
+</div>
+<!-- Context Menu (Absolute Positioned) -->
+<div class="absolute top-[90px] left-[160px] w-56 bg-[#2a2a2a] rounded-lg shadow-context border border-border-dark z-50 overflow-hidden ring-1 ring-white/10 animate-[fadeIn_0.1s_ease-out]">
+<div class="p-1">
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 hover:bg-primary/10 hover:text-primary text-white text-sm transition-colors group">
+<span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary">open_in_new</span>
+                                Open
+                            </button>
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 bg-primary/20 text-primary text-sm font-medium border border-primary/10">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+                                Open in Terminal
+                            </button>
+<div class="h-px bg-white/10 my-1 mx-2"></div>
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 hover:bg-primary/10 hover:text-primary text-white text-sm transition-colors group">
+<span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary">content_copy</span>
+                                Copy Path
+                            </button>
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 hover:bg-primary/10 hover:text-primary text-white text-sm transition-colors group">
+<span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary">content_cut</span>
+                                Cut
+                            </button>
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 hover:bg-primary/10 hover:text-primary text-white text-sm transition-colors group">
+<span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary">delete</span>
+                                Delete
+                            </button>
+<div class="h-px bg-white/10 my-1 mx-2"></div>
+<button class="w-full text-left px-3 py-2 rounded flex items-center gap-3 hover:bg-primary/10 hover:text-primary text-white text-sm transition-colors group">
+<span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary">settings</span>
+                                Properties
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Status Bar -->
+<div class="h-8 bg-surface-dark border-t border-border-dark flex items-center justify-between px-4 text-xs text-text-muted shrink-0">
+<div class="flex items-center gap-4">
+<span>8 items</span>
+<span class="w-px h-3 bg-white/10"></span>
+<span>1 item selected</span>
+<span class="w-px h-3 bg-white/10"></span>
+<span>4 KB</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Ready</span>
+<span class="uppercase">UTF-8</span>
+</div>
+</div>
+</main>
+</div>
+<!-- Toast Notification -->
+<div class="fixed bottom-12 right-6 z-50 animate-[slideIn_0.3s_ease-out]">
+<div class="bg-surface-dark border border-primary/20 rounded-lg shadow-glass p-4 flex items-start gap-4 max-w-sm">
+<div class="bg-primary/20 p-2 rounded-full shrink-0">
+<span class="material-symbols-outlined text-primary text-xl">check</span>
+</div>
+<div class="flex flex-col">
+<h4 class="text-sm font-semibold text-white">Success</h4>
+<p class="text-xs text-text-muted mt-1 leading-relaxed">File <span class="text-primary font-medium">'backup.zip'</span> copied to clipboard successfully.</p>
+</div>
+<button class="text-text-muted hover:text-white transition-colors ml-2">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+</div>
+</body></html>

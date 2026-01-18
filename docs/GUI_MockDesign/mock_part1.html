@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZManager Dual-Pane Interface</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#FED8B2", 
+              "primary-dim": "rgba(254, 216, 178, 0.1)",
+              "background-light": "#f9fafa",
+              "background-dark": "#323232",
+              "charcoal": "#323232",
+              "charcoal-dark": "#252525",
+              "charcoal-border": "#444444",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"],
+              "mono": ["Fira Code", "Consolas", "Monaco", "monospace"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #252525; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #444; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+    </style>
+</head>
+<body class="bg-black flex items-center justify-center min-h-screen p-4 sm:p-8 font-display text-white selection:bg-primary selection:text-charcoal-dark">
+<!-- Main Application Window -->
+<div class="w-full max-w-[1440px] h-[90vh] min-h-[700px] bg-background-dark rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-charcoal-border flex flex-col overflow-hidden ring-1 ring-white/10 relative">
+<!-- Top ToolBar / Window Chrome -->
+<header class="h-14 bg-charcoal-dark flex items-center justify-between px-4 border-b border-charcoal-border shrink-0 select-none z-20">
+<!-- Left: Window Controls & Branding -->
+<div class="flex items-center gap-6">
+<div class="flex gap-2 group">
+<button class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"></button>
+<button class="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"></button>
+<button class="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors"></button>
+</div>
+<div class="flex items-center gap-2 text-white/90">
+<div class="p-1 bg-primary rounded">
+<span class="material-symbols-outlined text-charcoal-dark text-[20px] font-bold">grid_view</span>
+</div>
+<span class="font-semibold tracking-tight">ZManager</span>
+</div>
+</div>
+<!-- Center: Smart Breadcrumbs & Search -->
+<div class="flex-1 px-8 max-w-4xl flex items-center gap-4">
+<!-- Navigation -->
+<div class="flex items-center text-sm font-medium text-gray-400 gap-1 bg-charcoal px-3 py-1.5 rounded-lg border border-charcoal-border shadow-sm flex-1">
+<span class="material-symbols-outlined text-[18px]">computer</span>
+<span class="material-symbols-outlined text-[16px] text-gray-600">chevron_right</span>
+<span class="hover:text-white hover:bg-white/5 px-1.5 py-0.5 rounded cursor-pointer transition-colors">Local Disk (C:)</span>
+<span class="material-symbols-outlined text-[16px] text-gray-600">chevron_right</span>
+<span class="hover:text-white hover:bg-white/5 px-1.5 py-0.5 rounded cursor-pointer transition-colors">Projects</span>
+<span class="material-symbols-outlined text-[16px] text-gray-600">chevron_right</span>
+<span class="hover:text-white hover:bg-white/5 px-1.5 py-0.5 rounded cursor-pointer transition-colors">ZManager</span>
+<span class="material-symbols-outlined text-[16px] text-gray-600">chevron_right</span>
+<span class="bg-primary text-charcoal-dark px-2 py-0.5 rounded font-semibold shadow-sm">src</span>
+</div>
+<!-- Search -->
+<div class="relative w-64 group">
+<span class="material-symbols-outlined absolute left-2.5 top-1.5 text-gray-500 group-focus-within:text-primary text-[20px]">search</span>
+<input class="w-full bg-charcoal border border-charcoal-border text-sm rounded-lg pl-10 pr-4 py-1.5 focus:ring-1 focus:ring-primary focus:border-primary placeholder-gray-600 text-gray-200 transition-all outline-none" placeholder="Search src" type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-2 text-gray-400">
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors" title="Settings">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors" title="Profile">
+<div class="w-6 h-6 rounded-full bg-gradient-to-tr from-primary to-orange-400 border border-white/20 shadow-inner" data-alt="User Avatar Gradient"></div>
+</button>
+</div>
+</header>
+<!-- Layout Body -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation -->
+<nav class="w-64 bg-charcoal-dark border-r border-charcoal-border flex flex-col py-6 gap-6 shrink-0 overflow-y-auto custom-scrollbar">
+<!-- Quick Access -->
+<div class="px-2">
+<h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-4 mb-2">Favorites</h3>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium bg-primary-dim text-primary border-l-[3px] border-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+                                Quick Access
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-white/5 border-l-[3px] border-transparent transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+                                Recent
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-white/5 border-l-[3px] border-transparent transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">cloud_queue</span>
+                                AirDrop
+                            </a>
+</li>
+</ul>
+</div>
+<!-- Drives -->
+<div class="px-2">
+<h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-4 mb-2">Locations</h3>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-white/5 border-l-[3px] border-transparent transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">laptop_chromebook</span>
+                                This PC
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-white/5 border-l-[3px] border-transparent transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dns</span>
+                                Network
+                            </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-white/5 border-l-[3px] border-transparent transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">usb</span>
+                                External (E:)
+                            </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Dual Pane Container -->
+<main class="flex-1 flex min-w-0 bg-background-dark relative">
+<!-- Left Pane (Active) -->
+<div class="flex-1 flex flex-col min-w-[320px] border-r border-charcoal-border">
+<!-- Pane Controls -->
+<div class="h-10 border-b border-charcoal-border bg-[#2c2c2c] flex items-center justify-between px-3">
+<div class="text-xs text-gray-400 font-mono">/c/Projects/ZManager/src/</div>
+<div class="flex gap-2">
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[18px]">filter_list</span></button>
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[18px]">view_module</span></button>
+</div>
+</div>
+<!-- File List Header -->
+<div class="grid grid-cols-12 gap-2 px-4 py-2 text-xs font-semibold text-gray-500 border-b border-charcoal-border/50 bg-[#2c2c2c]/50">
+<div class="col-span-6">Name</div>
+<div class="col-span-2">Ext</div>
+<div class="col-span-2 text-right">Size</div>
+<div class="col-span-2 text-right">Date</div>
+</div>
+<!-- List Content -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-0.5">
+<!-- Item: Folder -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-200 font-medium">
+<span class="material-symbols-outlined text-primary text-[20px] group-hover:scale-110 transition-transform">folder</span>
+                                assets
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">DIR</div>
+<div class="col-span-2 text-right text-xs text-gray-500">-</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 24</div>
+</div>
+<!-- Item: Folder -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-200 font-medium">
+<span class="material-symbols-outlined text-primary text-[20px] group-hover:scale-110 transition-transform">folder</span>
+                                components
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">DIR</div>
+<div class="col-span-2 text-right text-xs text-gray-500">-</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 24</div>
+</div>
+<!-- Item: Selected File -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded bg-primary-dim border border-primary/20 cursor-pointer text-sm group relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l"></div>
+<div class="col-span-6 flex items-center gap-2 text-white font-medium pl-2">
+<span class="material-symbols-outlined text-blue-400 text-[20px]">code</span>
+                                App.tsx
+                            </div>
+<div class="col-span-2 text-xs text-primary/80">TSX</div>
+<div class="col-span-2 text-right text-xs text-primary/80">14 KB</div>
+<div class="col-span-2 text-right text-xs text-primary/80">Today</div>
+</div>
+<!-- Item: File -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-300">
+<span class="material-symbols-outlined text-yellow-400 text-[20px]">javascript</span>
+                                index.ts
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">TS</div>
+<div class="col-span-2 text-right text-xs text-gray-500">2 KB</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 22</div>
+</div>
+<!-- Item: File -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-300">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">settings</span>
+                                tailwind.config.js
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">JS</div>
+<div class="col-span-2 text-right text-xs text-gray-500">4 KB</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 20</div>
+</div>
+</div>
+</div>
+<!-- Resizable Splitter Handle -->
+<div class="w-1.5 bg-background-dark border-x border-charcoal-border hover:bg-primary cursor-col-resize z-20 transition-colors flex items-center justify-center">
+<div class="h-8 w-0.5 bg-charcoal-border rounded-full"></div>
+</div>
+<!-- Right Pane (Secondary/Inactive) -->
+<div class="flex-1 hidden md:flex flex-col min-w-[320px] bg-[#2e2e2e]">
+<!-- Pane Controls -->
+<div class="h-10 border-b border-charcoal-border bg-[#2c2c2c] flex items-center justify-between px-3">
+<div class="text-xs text-gray-500 font-mono">/c/Downloads/Assets/</div>
+<div class="flex gap-2">
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[18px]">filter_list</span></button>
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[18px]">view_module</span></button>
+</div>
+</div>
+<!-- File List Header -->
+<div class="grid grid-cols-12 gap-2 px-4 py-2 text-xs font-semibold text-gray-600 border-b border-charcoal-border/50 bg-[#2c2c2c]/50">
+<div class="col-span-6">Name</div>
+<div class="col-span-2">Ext</div>
+<div class="col-span-2 text-right">Size</div>
+<div class="col-span-2 text-right">Date</div>
+</div>
+<!-- List Content -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-0.5 opacity-80 hover:opacity-100 transition-opacity">
+<!-- Up Dir -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-400 font-medium">
+<span class="material-symbols-outlined text-gray-500 text-[20px]">arrow_upward</span>
+                                ..
+                            </div>
+<div class="col-span-6 text-xs text-gray-600">Parent Directory</div>
+</div>
+<!-- Item: Image -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-purple-400 text-[20px]">image</span>
+                                hero_bg.png
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">PNG</div>
+<div class="col-span-2 text-right text-xs text-gray-500">2.4MB</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 18</div>
+</div>
+<!-- Item: PDF -->
+<div class="grid grid-cols-12 gap-2 items-center px-2 py-1.5 rounded hover:bg-white/5 cursor-pointer text-sm group">
+<div class="col-span-6 flex items-center gap-2 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-red-400 text-[20px]">picture_as_pdf</span>
+                                spec_sheet_v2.pdf
+                            </div>
+<div class="col-span-2 text-xs text-gray-500">PDF</div>
+<div class="col-span-2 text-right text-xs text-gray-500">800KB</div>
+<div class="col-span-2 text-right text-xs text-gray-500">Oct 15</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: Code Preview -->
+<aside class="w-96 bg-charcoal border-l border-charcoal-border flex flex-col shrink-0 hidden lg:flex shadow-xl z-10">
+<!-- Preview Header -->
+<div class="h-10 border-b border-charcoal-border bg-[#2a2a2a] flex items-center justify-between px-4">
+<div class="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-widest">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                        Preview
+                    </div>
+<div class="flex gap-2">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">open_in_new</span></button>
+</div>
+</div>
+<!-- Selected Item Info -->
+<div class="p-5 border-b border-charcoal-border flex items-start gap-4 bg-gradient-to-b from-charcoal to-[#2a2a2a]">
+<div class="w-12 h-12 rounded-lg bg-[#1e1e1e] flex items-center justify-center border border-charcoal-border shadow-inner shrink-0">
+<span class="material-symbols-outlined text-blue-400 text-[32px]">code</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-white font-medium truncate" title="App.tsx">App.tsx</h2>
+<div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+<span>TypeScript React</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span>14 KB</span>
+</div>
+<div class="mt-2 text-[10px] text-gray-400 font-mono bg-charcoal-dark px-2 py-1 rounded inline-block">
+                             Last modified: Today, 10:42 AM
+                         </div>
+</div>
+</div>
+<!-- Code Editor View -->
+<div class="flex-1 overflow-hidden bg-[#1e1e1e] relative">
+<div class="absolute top-2 right-2 text-[10px] text-gray-600 font-mono">UTF-8</div>
+<div class="h-full overflow-y-auto custom-scrollbar p-4 font-mono text-[11px] leading-6 text-gray-300">
+<div class="flex">
+<!-- Line Numbers -->
+<div class="flex flex-col text-gray-600 text-right pr-3 select-none border-r border-gray-700 mr-3 shrink-0">
+<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+</div>
+<!-- Code -->
+<div class="whitespace-pre overflow-x-auto custom-scrollbar pb-2">
+<span class="text-pink-400">import</span> React, { useState } <span class="text-pink-400">from</span> <span class="text-green-400">'react'</span>;
+<span class="text-pink-400">import</span> { Layout } <span class="text-pink-400">from</span> <span class="text-green-400">'./components/Layout'</span>;
+<span class="text-pink-400">import</span> { FileList } <span class="text-pink-400">from</span> <span class="text-green-400">'./components/FileList'</span>;
+
+<span class="text-gray-500">// Main Application Entry Point</span>
+<span class="text-blue-400">export const</span> <span class="text-yellow-300">App</span> = () =&gt; {
+  <span class="text-blue-400">const</span> [<span class="text-orange-300">viewMode</span>, <span class="text-orange-300">setViewMode</span>] = <span class="text-yellow-300">useState</span>(<span class="text-green-400">'dual'</span>);
+
+  <span class="text-blue-400">return</span> (
+    &lt;<span class="text-yellow-300">Layout</span> <span class="text-purple-300">theme</span>=<span class="text-green-400">"charcoal"</span>&gt;
+      &lt;<span class="text-yellow-300">div</span> <span class="text-purple-300">className</span>=<span class="text-green-400">"flex h-full"</span>&gt;
+        &lt;<span class="text-yellow-300">Sidebar</span> /&gt;
+        &lt;<span class="text-yellow-300">FileList</span> <span class="text-purple-300">mode</span>={<span class="text-orange-300">viewMode</span>} /&gt;
+      &lt;/<span class="text-yellow-300">div</span>&gt;
+    &lt;/<span class="text-yellow-300">Layout</span>&gt;
+  );
+};
+                            </div>
+</div>
+</div>
+</div>
+<!-- Preview Actions -->
+<div class="p-4 bg-charcoal-dark border-t border-charcoal-border grid grid-cols-2 gap-3">
+<button class="bg-primary hover:bg-opacity-90 text-charcoal-dark font-semibold py-2 rounded text-sm transition-all shadow-lg shadow-primary/20">Open File</button>
+<button class="bg-transparent border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 font-medium py-2 rounded text-sm transition-all">Properties</button>
+</div>
+</aside>
+</div>
+<!-- Status Bar -->
+<footer class="h-8 bg-charcoal-dark border-t border-charcoal-border flex items-center px-4 justify-between text-[11px] select-none text-gray-400 font-medium">
+<div class="flex gap-6">
+<div class="flex items-center gap-2 hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Ready</span>
+</div>
+<div class="w-px h-3 bg-gray-700"></div>
+<span class="hover:text-white cursor-pointer transition-colors">14 items selected</span>
+<span class="hover:text-white cursor-pointer transition-colors">2 hidden</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Progress Strip -->
+<div class="flex items-center gap-3 w-64 bg-[#1e1e1e] rounded-full px-3 py-1 border border-white/5">
+<span class="text-primary animate-pulse">Copying...</span>
+<div class="h-1.5 flex-1 bg-gray-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[45%] rounded-full shadow-[0_0_10px_rgba(254,216,178,0.5)]"></div>
+</div>
+<span class="text-white">45%</span>
+</div>
+<div class="w-px h-3 bg-gray-700"></div>
+<div class="flex gap-3">
+<span class="hover:text-white cursor-pointer transition-colors">Ln 14, Col 52</span>
+<span class="hover:text-white cursor-pointer transition-colors">UTF-8</span>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

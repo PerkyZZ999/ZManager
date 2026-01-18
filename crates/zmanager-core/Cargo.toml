@@ -1,0 +1,22 @@
+[package]
+name = "zmanager-core"
+description = "Core library for ZManager file manager"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+chrono.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+toml.workspace = true
+notify.workspace = true
+dirs = "6"
+tempfile = "3"
+
+[dev-dependencies]
+serde_json.workspace = true

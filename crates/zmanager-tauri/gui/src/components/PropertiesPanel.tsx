@@ -81,7 +81,7 @@ function PropertyRow({
 }) {
   return (
     <div className="flex py-1.5">
-      <span className="w-28 flex-shrink-0 text-sm text-zinc-400">{label}</span>
+      <span className="w-28 shrink-0 text-sm text-zinc-400">{label}</span>
       <span className={clsx("flex-1 break-all text-sm text-white", mono && "font-mono text-xs")}>
         {value}
       </span>
@@ -256,8 +256,8 @@ export function PropertiesPanel({ entries, onClose, asModal = true }: Properties
 
   if (asModal) {
     return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60">
-        <div className="w-[420px] overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800 shadow-2xl">
+      <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/60">
+        <div className="w-105 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-between border-zinc-700 border-b px-4 py-3">
             <h2 className="font-semibold text-lg">Properties</h2>

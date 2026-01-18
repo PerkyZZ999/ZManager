@@ -148,7 +148,7 @@ function Menu({
     <div
       ref={menuRef}
       style={style}
-      className="fixed z-[100] min-w-48 overflow-hidden rounded-md border border-zinc-700 bg-zinc-800 py-1 shadow-xl"
+      className="fixed z-100 min-w-48 overflow-hidden rounded-md border border-zinc-700 bg-zinc-800 py-1 shadow-xl"
     >
       {items.map((entry) => {
         if ("separator" in entry && entry.separator) {

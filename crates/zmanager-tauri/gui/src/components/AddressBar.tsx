@@ -91,7 +91,7 @@ function Breadcrumbs({ segments, onNavigate }: BreadcrumbProps) {
   return (
     <div className="flex items-center gap-0.5 overflow-hidden">
       {segments.map((segment, index) => (
-        <span key={segment.path} className="flex flex-shrink-0 items-center">
+        <span key={segment.path} className="flex shrink-0 items-center">
           {index > 0 && (
             <SvgIcon
               name="ic_chevron_right_small"

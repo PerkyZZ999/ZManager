@@ -82,7 +82,7 @@ function DialogWrapper({ title, children, onClose, footer, width = "w-96" }: Dia
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60">
+    <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/60">
       <div
         ref={dialogRef}
         role="dialog"

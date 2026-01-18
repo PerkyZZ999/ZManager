@@ -53,8 +53,6 @@ ZManager/
 | Refresh | `Ctrl+R` |
 | Quit | `q` or `Ctrl+Q` |
 
-<img width="2800" height="3600" alt="ZManager_Keyboard_Shortcuts_Cheatsheet" src="https://github.com/user-attachments/assets/220fa050-942a-470d-bc69-dddb1be588f8" />
-
 See [Keyboard Shortcuts](docs/Keyboard_Shortcuts.md) for the full reference.
 
 ## Building
@@ -120,5 +118,6 @@ See [Sprint Roadmap](docs/Sprint_Roadmap.md) for the full development plan.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
 
 

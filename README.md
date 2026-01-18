@@ -1,5 +1,5 @@
 # ZManager
-<img width="1024" height="1024" alt="ZManager_Icon" src="https://github.com/user-attachments/assets/996592ae-0375-4d5b-82f0-e663e22af900" />
+<img width="128" height="128" alt="ZManager_Icon" src="https://github.com/user-attachments/assets/996592ae-0375-4d5b-82f0-e663e22af900" />
 
 A fast, dual-pane file manager for Windows, built in Rust with TUI and GUI interfaces.
 
@@ -120,4 +120,5 @@ See [Sprint Roadmap](docs/Sprint_Roadmap.md) for the full development plan.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
 

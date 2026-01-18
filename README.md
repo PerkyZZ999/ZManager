@@ -1,4 +1,5 @@
 # ZManager
+<img width="1024" height="1024" alt="ZManager_Icon" src="https://github.com/user-attachments/assets/996592ae-0375-4d5b-82f0-e663e22af900" />
 
 A fast, dual-pane file manager for Windows, built in Rust with TUI and GUI interfaces.
 
@@ -51,6 +52,8 @@ ZManager/
 | Filter | `/` |
 | Refresh | `Ctrl+R` |
 | Quit | `q` or `Ctrl+Q` |
+
+<img width="2800" height="3600" alt="ZManager_Keyboard_Shortcuts_Cheatsheet" src="https://github.com/user-attachments/assets/220fa050-942a-470d-bc69-dddb1be588f8" />
 
 See [Keyboard Shortcuts](docs/Keyboard_Shortcuts.md) for the full reference.
 
@@ -117,3 +120,4 @@ See [Sprint Roadmap](docs/Sprint_Roadmap.md) for the full development plan.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+

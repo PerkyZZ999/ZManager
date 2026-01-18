@@ -1,0 +1,35 @@
+{
+  "name": "zmanager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A fast, dual-pane file manager for Windows built in Rust",
+  "scripts": {
+    "dev:gui": "cd crates/zmanager-tauri && cargo tauri dev",
+    "dev:tui": "cargo run -p zmanager-tui",
+    "dev:frontend": "cd crates/zmanager-tauri/gui && bun run dev",
+    "build:gui": "cd crates/zmanager-tauri && cargo tauri build",
+    "build:tui": "cargo build -p zmanager-tui --release",
+    "build:frontend": "cd crates/zmanager-tauri/gui && bun run build",
+    "build:full": "cargo build --workspace --release",
+    "test": "cargo test --workspace",
+    "test:watch": "cargo watch -x 'test --workspace'",
+    "check": "cargo clippy --workspace --all-targets -- -D warnings",
+    "format": "cargo fmt --all",
+    "format:check": "cargo fmt --all -- --check",
+    "clean": "cargo clean",
+    "docs": "cargo doc --workspace --no-deps --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PerkyZZ999/ZManager.git"
+  },
+  "keywords": [
+    "file-manager",
+    "rust",
+    "tauri",
+    "tui",
+    "windows"
+  ],
+  "author": "PerkyZZ999",
+  "license": "MIT"
+}

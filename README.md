@@ -3,8 +3,8 @@
 
 A fast, dual-pane file manager for Windows, built in Rust with TUI and GUI interfaces.
 
-<p align="center">
-  <img src="docs/screenshots/preview.png" alt="ZManager Preview" width="800">
+<p align="left">
+  <img width="800" height="500" alt="ScreenshotZManager" src="https://github.com/user-attachments/assets/a8d1495d-b54c-4d2b-9d9e-5dd7fcb75ad3" />
 </p>
 
 ## Features
@@ -118,6 +118,7 @@ See [Sprint Roadmap](docs/Sprint_Roadmap.md) for the full development plan.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
 
 
 

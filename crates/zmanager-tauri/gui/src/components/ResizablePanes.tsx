@@ -29,9 +29,9 @@ export function ResizablePanes({
 
       <Separator className="group relative w-1 bg-zinc-700 transition-colors hover:bg-primary/50 focus:bg-primary/50 focus:outline-none">
         {/* Wider hit area for easier grabbing */}
-        <div className="absolute inset-y-0 -right-1 -left-1" />
+        <div className="-right-1 -left-1 absolute inset-y-0" />
         {/* Visual indicator on hover */}
-        <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
+        <div className="-translate-x-1/2 absolute inset-y-0 left-1/2 w-0.5 bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
       </Separator>
 
       <Panel defaultSize={100 - defaultLeftSize} minSize={minSize}>

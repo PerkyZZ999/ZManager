@@ -44,7 +44,12 @@ interface FavoritesState {
   loadFavorites: () => Promise<void>;
   addFavorite: (name: string, path: string, icon?: string) => Promise<boolean>;
   removeFavorite: (id: string) => Promise<boolean>;
+  removeFavoriteByPath: (path: string) => Promise<boolean>;
   reorderFavorites: (ids: string[]) => Promise<boolean>;
+  /** Check if a path is already a favorite */
+  isFavorite: (path: string) => boolean;
+  /** Toggle favorite status for a path */
+  toggleFavorite: (name: string, path: string, icon?: string) => Promise<boolean>;
 }
 
 // ============================================================================
@@ -135,5 +140,28 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
       set({ favorites: currentFavorites, error: String(err) });
       return false;
     }
+  },
+
+  isFavorite: (path: string) => {
+    const normalized = path.toLowerCase().replace(/\\/g, "/").replace(/\/$/, "");
+    return get().favorites.some(
+      (f) => f.path.toLowerCase().replace(/\\/g, "/").replace(/\/$/, "") === normalized
+    );
+  },
+
+  removeFavoriteByPath: async (path: string) => {
+    const normalized = path.toLowerCase().replace(/\\/g, "/").replace(/\/$/, "");
+    const favorite = get().favorites.find(
+      (f) => f.path.toLowerCase().replace(/\\/g, "/").replace(/\/$/, "") === normalized
+    );
+    if (!favorite) return false;
+    return get().removeFavorite(favorite.id);
+  },
+
+  toggleFavorite: async (name: string, path: string, icon?: string) => {
+    if (get().isFavorite(path)) {
+      return get().removeFavoriteByPath(path);
+    }
+    return get().addFavorite(name, path, icon);
   },
 }));

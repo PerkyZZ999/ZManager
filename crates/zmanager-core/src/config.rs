@@ -40,8 +40,9 @@ impl Config {
         debug!(path = %path.display(), "Loading configuration");
 
         if !path.exists() {
-            info!("Config file not found, creating default");
-            let config = Self::default();
+            info!("Config file not found, creating default with initial favorites");
+            let mut config = Self::default();
+            config.add_default_favorites();
             config.save_to(path)?;
             return Ok(config);
         }
@@ -128,12 +129,19 @@ impl Config {
     pub fn add_favorite(&mut self, favorite: Favorite) {
         // Check for duplicate paths (case-insensitive on Windows)
         let path_normalized = favorite.path.to_string_lossy().to_lowercase();
-        let already_exists = self.favorites.iter().any(|f| {
+        let path_exists = self.favorites.iter().any(|f| {
             f.path.to_string_lossy().to_lowercase() == path_normalized
         });
         
-        if already_exists {
+        if path_exists {
             debug!("Favorite with path {:?} already exists, skipping", favorite.path);
+            return;
+        }
+        
+        // Also check for duplicate IDs (shouldn't happen with new hash-based IDs, but safety first)
+        let id_exists = self.favorites.iter().any(|f| f.id == favorite.id);
+        if id_exists {
+            debug!("Favorite with id {:?} already exists, skipping", favorite.id);
             return;
         }
         
@@ -167,20 +175,58 @@ impl Config {
         self.favorites.sort_by_key(|f| f.order);
     }
 
-    /// Deduplicate favorites by path (case-insensitive).
-    /// Keeps the first occurrence of each path.
+    /// Deduplicate favorites by both ID and path (case-insensitive).
+    /// Keeps the first occurrence of each unique ID and path.
     pub fn deduplicate_favorites(&mut self) {
         use std::collections::HashSet;
         
+        let mut seen_ids: HashSet<String> = HashSet::new();
         let mut seen_paths: HashSet<String> = HashSet::new();
+        
         self.favorites.retain(|f| {
+            let id_normalized = f.id.to_lowercase();
             let path_normalized = f.path.to_string_lossy().to_lowercase();
-            seen_paths.insert(path_normalized)
+            
+            // Keep only if both ID and path are unique
+            let id_is_new = seen_ids.insert(id_normalized);
+            let path_is_new = seen_paths.insert(path_normalized);
+            
+            // Keep this entry only if BOTH are new (first occurrence)
+            id_is_new && path_is_new
         });
         
         // Renumber orders
         for (i, fav) in self.favorites.iter_mut().enumerate() {
             fav.order = i as u32;
+        }
+    }
+
+    /// Add default favorites for a fresh installation.
+    /// Uses Windows standard folders based on user profile.
+    pub fn add_default_favorites(&mut self) {
+        // Get user directories using the dirs crate
+        if let Some(home) = dirs::home_dir() {
+            let mut fav = Favorite::new("Home", &home);
+            fav.icon = Some("home".to_string());
+            self.add_favorite(fav);
+        }
+        
+        if let Some(desktop) = dirs::desktop_dir() {
+            let mut fav = Favorite::new("Desktop", &desktop);
+            fav.icon = Some("desktop".to_string());
+            self.add_favorite(fav);
+        }
+        
+        if let Some(downloads) = dirs::download_dir() {
+            let mut fav = Favorite::new("Downloads", &downloads);
+            fav.icon = Some("arrow_download".to_string());
+            self.add_favorite(fav);
+        }
+        
+        if let Some(documents) = dirs::document_dir() {
+            let mut fav = Favorite::new("Documents", &documents);
+            fav.icon = Some("document".to_string());
+            self.add_favorite(fav);
         }
     }
 }
@@ -320,16 +366,22 @@ pub struct Favorite {
 
 impl Favorite {
     /// Create a new favorite.
+    /// ID is generated from name + path hash to ensure uniqueness.
     pub fn new(name: impl Into<String>, path: impl Into<PathBuf>) -> Self {
         let name = name.into();
         let path = path.into();
 
-        // Generate a simple ID from name
-        let id = name
+        // Generate ID from name + short hash of path for uniqueness
+        let name_part: String = name
             .to_lowercase()
             .chars()
             .filter(|c| c.is_alphanumeric() || *c == '-')
-            .collect::<String>();
+            .collect();
+        
+        // Create a simple hash from the path to ensure unique IDs
+        let path_str = path.to_string_lossy().to_lowercase();
+        let path_hash: u32 = path_str.bytes().fold(0u32, |acc, b| acc.wrapping_add(b as u32).wrapping_mul(31));
+        let id = format!("{}-{:x}", name_part, path_hash & 0xFFFF);
 
         Self {
             id,

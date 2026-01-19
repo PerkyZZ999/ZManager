@@ -4,6 +4,7 @@
  * Displays:
  * - Quick Access / Favorites section (drag-to-reorder, right-click remove)
  * - Drives section
+ * - Footer with Settings, View, About buttons
  */
 
 import {
@@ -30,6 +31,7 @@ import {
   useFavoritesStore,
   useFileSystemStore,
   useUIStore,
+  type ViewMode,
 } from "../stores";
 import type { DriveInfo } from "../types";
 import { getDriveIconName, getUiIconName } from "../utils/iconMappings";
@@ -197,16 +199,313 @@ function SortableFavoriteItem({
   );
 }
 
-/** Default favorites for new installations */
-const DEFAULT_FAVORITES: Array<{ name: string; pathSuffix: string; icon: string }> = [
-  { name: "Home", pathSuffix: "", icon: "home" },
-  { name: "Desktop", pathSuffix: "\\Desktop", icon: "desktop" },
-  { name: "Downloads", pathSuffix: "\\Downloads", icon: "arrow_download" },
-  { name: "Documents", pathSuffix: "\\Documents", icon: "document" },
-];
+// ============================================================================
+// View Dropdown Component (opens upward)
+// ============================================================================
+
+interface ViewDropdownProps {
+  isOpen: boolean;
+  onClose: () => void;
+  viewMode: ViewMode;
+  onModeChange: (mode: ViewMode) => void;
+}
+
+function ViewDropdown({ isOpen, onClose, viewMode, onModeChange }: ViewDropdownProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      ref={dropdownRef}
+      className="absolute bottom-full left-0 mb-1 min-w-28 rounded border border-zinc-600 bg-zinc-800 py-1 shadow-lg"
+    >
+      <button
+        type="button"
+        onClick={() => {
+          onModeChange("list");
+          onClose();
+        }}
+        className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-white/5 ${
+          viewMode === "list" ? "text-primary" : ""
+        }`}
+      >
+        <SvgIcon name={getUiIconName("list")} size={14} />
+        List
+        {viewMode === "list" && (
+          <SvgIcon name={getUiIconName("checkmark")} size={12} className="ml-auto" />
+        )}
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          onModeChange("grid");
+          onClose();
+        }}
+        className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-white/5 ${
+          viewMode === "grid" ? "text-primary" : ""
+        }`}
+      >
+        <SvgIcon name={getUiIconName("grid")} size={14} />
+        Grid
+        {viewMode === "grid" && (
+          <SvgIcon name={getUiIconName("checkmark")} size={12} className="ml-auto" />
+        )}
+      </button>
+    </div>
+  );
+}
+
+// ============================================================================
+// Settings Dialog Component
+// ============================================================================
+
+interface SettingsDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/60">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        className="w-125 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800 shadow-2xl"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between border-zinc-700 border-b px-4 py-3">
+          <h2 className="font-semibold text-lg">Settings</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 transition-colors hover:bg-white/10"
+            aria-label="Close dialog"
+          >
+            <SvgIcon name={getUiIconName("close")} size={16} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="px-4 py-6">
+          <div className="space-y-6">
+            {/* General Section */}
+            <div>
+              <h3 className="mb-3 font-medium text-sm text-zinc-300">General</h3>
+              <div className="space-y-3">
+                <label className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-400">Show hidden files</span>
+                  <input type="checkbox" className="h-4 w-4 rounded accent-primary" />
+                </label>
+                <label className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-400">Confirm before delete</span>
+                  <input
+                    type="checkbox"
+                    defaultChecked
+                    className="h-4 w-4 rounded accent-primary"
+                  />
+                </label>
+              </div>
+            </div>
+
+            {/* Appearance Section */}
+            <div>
+              <h3 className="mb-3 font-medium text-sm text-zinc-300">Appearance</h3>
+              <div className="space-y-3">
+                <label className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-400">Theme</span>
+                  <select className="rounded bg-zinc-700 px-2 py-1 text-sm outline-none">
+                    <option value="dark">Dark</option>
+                    <option value="light" disabled>
+                      Light (Coming Soon)
+                    </option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-2 border-zinc-700 border-t px-4 py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded bg-zinc-700 px-4 py-2 font-medium text-sm transition-colors hover:bg-zinc-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// About Dialog Component
+// ============================================================================
+
+interface AboutDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function AboutDialog({ isOpen, onClose }: AboutDialogProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/60">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        className="w-80 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800 shadow-2xl"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between border-zinc-700 border-b px-4 py-3">
+          <h2 className="font-semibold text-lg">About</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 transition-colors hover:bg-white/10"
+            aria-label="Close dialog"
+          >
+            <SvgIcon name={getUiIconName("close")} size={16} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col items-center px-4 py-6 text-center">
+          <SvgIcon name={getUiIconName("folder")} size={48} className="mb-4 text-primary" />
+          <h3 className="font-bold text-xl">ZManager</h3>
+          <p className="mt-1 text-sm text-zinc-400">Version 0.1.0</p>
+          <p className="mt-4 text-sm text-zinc-500">A modern dual-pane file manager for Windows.</p>
+          <p className="mt-2 text-xs text-zinc-600">Built with Rust, Tauri & React</p>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-center border-zinc-700 border-t px-4 py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded bg-primary px-4 py-2 font-medium text-sm text-zinc-900 transition-colors hover:bg-primary/80"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Sidebar Footer Component
+// ============================================================================
+
+interface SidebarFooterProps {
+  onSettingsClick: () => void;
+  onAboutClick: () => void;
+  viewMode: ViewMode;
+  onViewModeChange: (mode: ViewMode) => void;
+}
+
+function SidebarFooter({
+  onSettingsClick,
+  onAboutClick,
+  viewMode,
+  onViewModeChange,
+}: SidebarFooterProps) {
+  const [viewDropdownOpen, setViewDropdownOpen] = useState(false);
+
+  return (
+    <div className="relative flex items-center justify-center gap-1 border-zinc-700 border-t px-2 py-2">
+      {/* Settings Button - icon only with tooltip */}
+      <button
+        type="button"
+        onClick={onSettingsClick}
+        className="flex items-center justify-center rounded p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
+        title="Settings"
+        aria-label="Settings"
+      >
+        <SvgIcon name={getUiIconName("settings")} size={18} />
+      </button>
+
+      {/* View Button with Dropdown - icon only with tooltip */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setViewDropdownOpen(!viewDropdownOpen)}
+          className="flex items-center justify-center rounded p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
+          title="View"
+          aria-label="View"
+        >
+          <SvgIcon
+            name={viewMode === "list" ? getUiIconName("list") : getUiIconName("grid")}
+            size={18}
+          />
+        </button>
+        <ViewDropdown
+          isOpen={viewDropdownOpen}
+          onClose={() => setViewDropdownOpen(false)}
+          viewMode={viewMode}
+          onModeChange={onViewModeChange}
+        />
+      </div>
+
+      {/* About Button - icon only with tooltip */}
+      <button
+        type="button"
+        onClick={onAboutClick}
+        className="flex items-center justify-center rounded p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
+        title="About"
+        aria-label="About"
+      >
+        <SvgIcon name={getUiIconName("info")} size={18} />
+      </button>
+    </div>
+  );
+}
+
+/** Default favorites are now created in the backend when config is first created */
 
 export function Sidebar() {
-  const { sidebarVisible, expandedSections, toggleSection } = useUIStore();
+  const { sidebarVisible, expandedSections, toggleSection, viewMode, setViewMode } = useUIStore();
   const { drives, drivesLoading, loadDrives, navigateTo, activePane } = useFileSystemStore();
   const {
     favorites,
@@ -214,10 +513,11 @@ export function Sidebar() {
     loadFavorites,
     removeFavorite,
     reorderFavorites,
-    addFavorite,
   } = useFavoritesStore();
 
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; id: string } | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   // DnD sensors for sortable favorites
   const sensors = useSensors(
@@ -236,30 +536,6 @@ export function Sidebar() {
     loadDrives();
     loadFavorites();
   }, [loadDrives, loadFavorites]);
-
-  // Add default favorites if none exist (first run)
-  // Use ref to prevent double execution in React Strict Mode
-  const defaultsAddedRef = useRef(false);
-  useEffect(() => {
-    // Only add defaults when not loading and no favorites exist yet
-    if (favoritesLoading || favorites.length > 0 || defaultsAddedRef.current) {
-      return;
-    }
-    defaultsAddedRef.current = true;
-
-    // Get user profile path from environment
-    const userProfile =
-      import.meta.env.VITE_USERPROFILE || `C:\\Users\\${import.meta.env.VITE_USERNAME || "Public"}`;
-
-    // Add defaults sequentially
-    const addDefaults = async () => {
-      for (const def of DEFAULT_FAVORITES) {
-        const path = def.pathSuffix ? `${userProfile}${def.pathSuffix}` : userProfile;
-        await addFavorite(def.name, path, def.icon);
-      }
-    };
-    addDefaults();
-  }, [favoritesLoading, favorites.length, addFavorite]);
 
   const handleNavigate = useCallback(
     (path: string) => {
@@ -368,10 +644,13 @@ export function Sidebar() {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Footer with version */}
-      <div className="border-zinc-700 border-t px-3 py-2 text-xs text-zinc-500">
-        ZManager v0.1.0
-      </div>
+      {/* Footer with action buttons */}
+      <SidebarFooter
+        onSettingsClick={() => setSettingsOpen(true)}
+        onAboutClick={() => setAboutOpen(true)}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+      />
 
       {/* Context Menu */}
       {contextMenu && (
@@ -382,6 +661,10 @@ export function Sidebar() {
           onClose={() => setContextMenu(null)}
         />
       )}
+
+      {/* Dialogs */}
+      <SettingsDialog isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <AboutDialog isOpen={aboutOpen} onClose={() => setAboutOpen(false)} />
     </aside>
   );
 }

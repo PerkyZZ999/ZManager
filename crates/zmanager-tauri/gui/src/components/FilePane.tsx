@@ -16,7 +16,7 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
 import { createFile, createFolder, deleteEntries, openFile, renameEntry } from "../lib/tauri";
-import { type PaneId, useClipboardStore, useFileSystemStore } from "../stores";
+import { type PaneId, useClipboardStore, useFavoritesStore, useFileSystemStore } from "../stores";
 import type { EntryMeta, SortField } from "../types";
 import { AddressBar } from "./AddressBar";
 import { type MenuEntry, useContextMenu } from "./ContextMenu";
@@ -45,7 +45,7 @@ function SearchInput({ value, onChange, placeholder = "Search..." }: SearchInput
         name="ic_search"
         size={14}
         alt="Search"
-        className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 opacity-50"
+        className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-2 opacity-50"
       />
       <input
         type="text"
@@ -179,6 +179,8 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
     operation: clipboardOperation,
   } = useClipboardStore();
 
+  const { isFavorite, toggleFavorite } = useFavoritesStore();
+
   const dialog = useDialog();
   const contextMenu = useContextMenu();
   const toast = useToast();
@@ -219,7 +221,7 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
       navigateTo(paneId, path);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paneId]); // Only run once on mount, not on path change
+  }, [paneId, listing, navigateTo, path]); // Only run once on mount, not on path change
 
   // Handle entry selection
   const handleSelect = useCallback(
@@ -447,16 +449,20 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
       e.preventDefault();
       setActivePane(paneId);
 
-      // If right-clicking on an unselected entry, select it
+      // Determine if we need to select the right-clicked entry
+      let entryWasJustSelected = false;
       if (entry && listing) {
         const entryIndex = listing.entries.findIndex((e) => e.path === entry.path);
         if (entryIndex >= 0 && !selectedIndices.has(entryIndex)) {
           setCursor(paneId, entryIndex);
           setSelection(paneId, new Set([entryIndex]));
+          entryWasJustSelected = true;
         }
       }
 
-      const selected = entry ? getSelectedEntries() : [];
+      // Get selected entries - if we just selected a single entry, use it directly
+      // (since state update is async and getSelectedEntries would return stale data)
+      const selected = entryWasJustSelected && entry ? [entry] : entry ? getSelectedEntries() : [];
       const hasSelection = selected.length > 0;
       const singleSelection = selected.length === 1;
       const isDirectory =
@@ -497,6 +503,25 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
           shortcut: "Ctrl+C",
           onClick: handleCopy,
         });
+
+        // Add to Quick Access option for directories
+        if (isDirectory && singleSelection) {
+          menuItems.push({ separator: true });
+          const isInQuickAccess = isFavorite(selected[0].path);
+          menuItems.push({
+            id: "toggle-quick-access",
+            label: isInQuickAccess ? "Remove from Quick Access" : "Add to Quick Access",
+            icon: isInQuickAccess ? "ic_star_off" : "ic_star",
+            onClick: async () => {
+              const success = await toggleFavorite(selected[0].name, selected[0].path, "folder");
+              if (success) {
+                toast.success(
+                  isInQuickAccess ? "Removed from Quick Access" : "Added to Quick Access"
+                );
+              }
+            },
+          });
+        }
 
         menuItems.push({ separator: true });
 
@@ -590,6 +615,9 @@ export function FilePane({ paneId }: { paneId: PaneId }) {
       handleNewFile,
       refresh,
       contextMenu,
+      isFavorite,
+      toggleFavorite,
+      toast,
     ]
   );
 

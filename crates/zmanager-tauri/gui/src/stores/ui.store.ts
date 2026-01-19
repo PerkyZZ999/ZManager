@@ -12,6 +12,9 @@ export type SidebarSection = "favorites" | "drives" | "quickAccess";
 /** Pane layout mode */
 export type PaneMode = "single" | "dual";
 
+/** View mode for file list display */
+export type ViewMode = "list" | "grid";
+
 /** UI store state */
 interface UIState {
   /** Whether the sidebar is visible */
@@ -26,6 +29,8 @@ interface UIState {
   activeModal: string | null;
   /** Pane layout mode (single or dual pane) */
   paneMode: PaneMode;
+  /** View mode (list or grid) */
+  viewMode: ViewMode;
 
   // Actions
   /** Toggle sidebar visibility */
@@ -46,6 +51,8 @@ interface UIState {
   togglePaneMode: () => void;
   /** Set pane mode directly */
   setPaneMode: (mode: PaneMode) => void;
+  /** Set view mode */
+  setViewMode: (mode: ViewMode) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -55,6 +62,7 @@ export const useUIStore = create<UIState>((set) => ({
   isFullscreen: false,
   activeModal: null,
   paneMode: "single", // Default to single pane
+  viewMode: "list", // Default to list view
 
   toggleSidebar: () => {
     set((state) => ({ sidebarVisible: !state.sidebarVisible }));
@@ -100,5 +108,9 @@ export const useUIStore = create<UIState>((set) => ({
 
   setPaneMode: (mode) => {
     set({ paneMode: mode });
+  },
+
+  setViewMode: (mode) => {
+    set({ viewMode: mode });
   },
 }));

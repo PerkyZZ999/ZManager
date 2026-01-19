@@ -1,9 +1,12 @@
 {
 	"servers": {
 		"tauri": {
-      "command": "npx",
-      "args": ["-y", "mcp-tauri-webdriver"]
-    }
+			"command": "npx",
+			"args": [
+				"-y",
+				"mcp-tauri-webdriver"
+			]
+		}
 	},
 	"inputs": []
 }

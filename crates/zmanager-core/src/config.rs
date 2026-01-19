@@ -48,9 +48,19 @@ impl Config {
 
         let content = std::fs::read_to_string(path).map_err(|e| ZError::io(path, e))?;
 
-        let config: Self = toml::from_str(&content).map_err(|e| ZError::Config {
+        let mut config: Self = toml::from_str(&content).map_err(|e| ZError::Config {
             message: format!("Failed to parse config: {e}"),
         })?;
+
+        // Deduplicate favorites to fix any corrupted config
+        let old_count = config.favorites.len();
+        config.deduplicate_favorites();
+        let new_count = config.favorites.len();
+        if old_count != new_count {
+            info!("Removed {} duplicate favorites", old_count - new_count);
+            // Save the cleaned config
+            config.save_to(path)?;
+        }
 
         config.validate()?;
 
@@ -114,7 +124,19 @@ impl Config {
     }
 
     /// Add a favorite.
+    /// Skips if a favorite with the same path already exists.
     pub fn add_favorite(&mut self, favorite: Favorite) {
+        // Check for duplicate paths (case-insensitive on Windows)
+        let path_normalized = favorite.path.to_string_lossy().to_lowercase();
+        let already_exists = self.favorites.iter().any(|f| {
+            f.path.to_string_lossy().to_lowercase() == path_normalized
+        });
+        
+        if already_exists {
+            debug!("Favorite with path {:?} already exists, skipping", favorite.path);
+            return;
+        }
+        
         // Set order to end of list if not specified
         let mut fav = favorite;
         if fav.order == 0 {
@@ -143,6 +165,23 @@ impl Config {
             }
         }
         self.favorites.sort_by_key(|f| f.order);
+    }
+
+    /// Deduplicate favorites by path (case-insensitive).
+    /// Keeps the first occurrence of each path.
+    pub fn deduplicate_favorites(&mut self) {
+        use std::collections::HashSet;
+        
+        let mut seen_paths: HashSet<String> = HashSet::new();
+        self.favorites.retain(|f| {
+            let path_normalized = f.path.to_string_lossy().to_lowercase();
+            seen_paths.insert(path_normalized)
+        });
+        
+        // Renumber orders
+        for (i, fav) in self.favorites.iter_mut().enumerate() {
+            fav.order = i as u32;
+        }
     }
 }
 

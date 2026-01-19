@@ -55,11 +55,14 @@ export const SvgIcon = memo(function SvgIcon({
   // Determine fill color
   const fill = shouldUseCurrentColor ? "currentColor" : color;
 
+  // Build class name - add icon-ui for UI icons to enable CSS-based fill override
+  const svgClassName = `inline-block shrink-0 ${isUiIcon ? "icon-ui" : ""} ${className}`.trim();
+
   return (
     <svg
       width={size}
       height={size}
-      className={`inline-block shrink-0 ${className}`}
+      className={svgClassName}
       style={style}
       aria-hidden={!alt}
       aria-label={alt}

@@ -127,3 +127,18 @@ body {
   outline-offset: -2px;
   background-color: rgba(254, 216, 178, 0.05);
 }
+
+/*
+ * UI Icon Color Override
+ * The UI icons from Fluent UI have hardcoded fill="#212121" in their path elements.
+ * This CSS forces all paths inside SVGs with the .icon-ui class to use currentColor,
+ * allowing them to inherit the text color from their parent elements.
+ */
+svg.icon-ui,
+svg.icon-ui use,
+svg.icon-ui path,
+svg.icon-ui circle,
+svg.icon-ui rect,
+svg.icon-ui polygon {
+  fill: currentColor !important;
+}
